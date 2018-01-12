@@ -1,4 +1,10 @@
 spring:
+  cloud:
+    inetutils:
+      preferredNetworks:
+        - 192.168
+
+spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/authdb
     username: postgres
