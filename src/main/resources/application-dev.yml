@@ -1,12 +1,14 @@
+server:
+  port: 8888
+
 spring:
   cloud:
     inetutils:
       preferredNetworks:
         - 192.168
 
-spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/authdb
+    url: jdbc:postgresql://postgres.eprocurement.systems:5432/authdb
     username: postgres
     password: postgres
     driverClassName: org.postgresql.Driver
@@ -24,7 +26,7 @@ eureka:
     fetchRegistry: false
     registerWithEureka: true
     serviceUrl:
-      defaultZone: http://eureka-peer-1:8800/eureka/,http://eureka-peer-2:8800/eureka/
+      defaultZone: http://eureka-peer-1:8801/eureka/,http://eureka-peer-2:8802/eureka/
 
 jwt:
   life-time:
