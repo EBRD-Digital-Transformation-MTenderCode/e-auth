@@ -171,7 +171,7 @@ class AuthControllerTest {
         mockMvc.perform(get(URL_REFRESH))
             .andExpect(status().isUnauthorized)
             .andExpect(
-                header().string(HEADER_NAME_WWW_AUTHENTICATE, BASIC_REALM)
+                header().string(HEADER_NAME_WWW_AUTHENTICATE, BEARER_REALM)
             )
     }
 
@@ -185,7 +185,7 @@ class AuthControllerTest {
         mockMvc.perform(get(URL_REFRESH))
             .andExpect(status().isUnauthorized)
             .andExpect(
-                header().string(HEADER_NAME_WWW_AUTHENTICATE, BASIC_REALM)
+                header().string(HEADER_NAME_WWW_AUTHENTICATE, BEARER_REALM)
             )
     }
 

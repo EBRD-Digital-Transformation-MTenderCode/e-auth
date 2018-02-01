@@ -20,30 +20,38 @@ class WebExceptionHandler : ResponseEntityExceptionHandler() {
     }
 
     @ExceptionHandler(value = [NoSuchAuthHeaderException::class])
-    fun noSuchAuthHeaderException(e: NoSuchAuthHeaderException): ResponseEntity<*> {
+    fun noSuchAuthHeaderException(e: NoSuchAuthHeaderException): ResponseEntity<*> =
         when (e.authTokenType) {
-            AuthTokenType.BASIC -> log.debug("There is no 'Basic' authentication header.", e)
-            AuthTokenType.BEARER -> log.debug("There is no 'Bearer' authentication header.", e)
+            AuthTokenType.BASIC -> {
+                log.debug("There is no 'Basic' authentication header.", e)
+                ResponseEntity.status(HttpStatus.UNAUTHORIZED.value())
+                    .header(HEADER_NAME_WWW_AUTHENTICATE, BASIC_REALM)
+                    .build<Any>()
+            }
+            AuthTokenType.BEARER -> {
+                log.debug("There is no 'Bearer' authentication header.", e)
+                ResponseEntity.status(HttpStatus.UNAUTHORIZED.value())
+                    .header(HEADER_NAME_WWW_AUTHENTICATE, BEARER_REALM)
+                    .build<Any>()
+            }
         }
-
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED.value())
-            .header(HEADER_NAME_WWW_AUTHENTICATE, BASIC_REALM)
-            .build<Any>()
-    }
 
     @ExceptionHandler(value = [InvalidAuthHeaderTypeException::class])
-    fun invalidAuthHeaderTypeException(e: InvalidAuthHeaderTypeException): ResponseEntity<*> {
+    fun invalidAuthHeaderTypeException(e: InvalidAuthHeaderTypeException): ResponseEntity<*> =
         when (e.authTokenType) {
-            AuthTokenType.BASIC ->
+            AuthTokenType.BASIC -> {
                 log.debug("Invalid authentication type, requires a 'Basic' authentication type.", e)
-            AuthTokenType.BEARER ->
+                ResponseEntity.status(HttpStatus.UNAUTHORIZED.value())
+                    .header(HEADER_NAME_WWW_AUTHENTICATE, BASIC_REALM)
+                    .build<Any>()
+            }
+            AuthTokenType.BEARER -> {
                 log.debug("Invalid authentication type, requires a 'Bearer' authentication type.", e)
+                ResponseEntity.status(HttpStatus.UNAUTHORIZED.value())
+                    .header(HEADER_NAME_WWW_AUTHENTICATE, BEARER_REALM)
+                    .build<Any>()
+            }
         }
-
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED.value())
-            .header(HEADER_NAME_WWW_AUTHENTICATE, BASIC_REALM)
-            .build<Any>()
-    }
 
     @ExceptionHandler(value = [InvalidUserCredentialsTokenException::class])
     fun invalidUserCredentialsTokenException(e: InvalidUserCredentialsTokenException): ResponseEntity<*> {
@@ -65,8 +73,9 @@ class WebExceptionHandler : ResponseEntityExceptionHandler() {
     fun platformNotFoundException(e: PlatformNotFoundException): ResponseEntity<*> {
         log.debug("Platform not found.", e)
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED.value())
-            .header(HEADER_NAME_WWW_AUTHENTICATE,
-                    """$BEARER_REALM, error_code="invalid_token", error_message="Invalid platform id""""
+            .header(
+                HEADER_NAME_WWW_AUTHENTICATE,
+                """$BEARER_REALM, error_code="invalid_token", error_message="Invalid platform id""""
             )
             .build<Any>()
     }
@@ -83,11 +92,12 @@ class WebExceptionHandler : ResponseEntityExceptionHandler() {
     fun accountRevokedException(e: AccountRevokedException): ResponseEntity<*> {
         log.debug("The account revoked.", e)
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED.value())
-            .header(HEADER_NAME_WWW_AUTHENTICATE,
-                    when (e.authTokenType) {
-                        AuthTokenType.BASIC -> """$BASIC_REALM, error_message="The account revoked""""
-                        AuthTokenType.BEARER -> """$BEARER_REALM, error_code="invalid_token", error_message="The account revoked""""
-                    }
+            .header(
+                HEADER_NAME_WWW_AUTHENTICATE,
+                when (e.authTokenType) {
+                    AuthTokenType.BASIC -> """$BASIC_REALM, error_message="The account revoked""""
+                    AuthTokenType.BEARER -> """$BEARER_REALM, error_code="invalid_token", error_message="The account revoked""""
+                }
             )
             .build<Any>()
     }
