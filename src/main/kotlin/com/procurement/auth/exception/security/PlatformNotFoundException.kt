@@ -2,4 +2,5 @@ package com.procurement.auth.exception.security
 
 import javax.servlet.http.HttpServletRequest
 
-class PlatformNotFoundException(val request: HttpServletRequest) : RuntimeException()
+class PlatformNotFoundException(message: String, request: HttpServletRequest) :
+    SecurityBaseException(message, request)

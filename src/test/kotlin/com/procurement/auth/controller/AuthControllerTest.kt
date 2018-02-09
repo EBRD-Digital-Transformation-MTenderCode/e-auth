@@ -67,7 +67,7 @@ class AuthControllerTest {
     @Test
     @DisplayName("tokens - NoSuchAuthHeaderException")
     fun tokens1() {
-        doThrow(NoSuchAuthHeaderException(request = httpServletRequest, authTokenType = AuthTokenType.BASIC))
+        doThrow(NoSuchAuthHeaderException(message = "", request = httpServletRequest, authTokenType = AuthTokenType.BASIC))
             .whenever(tokenService)
             .getTokensByUserCredentials(any())
 
@@ -81,7 +81,7 @@ class AuthControllerTest {
     @Test
     @DisplayName("tokens - InvalidAuthHeaderTypeException")
     fun tokens2() {
-        doThrow(InvalidAuthHeaderTypeException(request = httpServletRequest, authTokenType = AuthTokenType.BASIC))
+        doThrow(InvalidAuthHeaderTypeException(message = "", request = httpServletRequest, authTokenType = AuthTokenType.BASIC))
             .whenever(tokenService)
             .getTokensByUserCredentials(any())
 
@@ -95,7 +95,7 @@ class AuthControllerTest {
     @Test
     @DisplayName("tokens - InvalidUserCredentialsTokenException")
     fun tokens3() {
-        doThrow(InvalidUserCredentialsTokenException(request = httpServletRequest))
+        doThrow(InvalidUserCredentialsTokenException(message = "", request = httpServletRequest))
             .whenever(tokenService)
             .getTokensByUserCredentials(any())
 
@@ -109,7 +109,7 @@ class AuthControllerTest {
     @Test
     @DisplayName("tokens - AccountNotFoundException")
     fun tokens4() {
-        doThrow(AccountNotFoundException(request = httpServletRequest))
+        doThrow(AccountNotFoundException(message = "", request = httpServletRequest))
             .whenever(tokenService)
             .getTokensByUserCredentials(any())
 
@@ -123,7 +123,7 @@ class AuthControllerTest {
     @Test
     @DisplayName("tokens - InvalidUserCredentialsException")
     fun tokens5() {
-        doThrow(InvalidUserCredentialsException(request = httpServletRequest))
+        doThrow(InvalidUserCredentialsException(message = "", request = httpServletRequest))
             .whenever(tokenService)
             .getTokensByUserCredentials(any())
 
@@ -137,7 +137,7 @@ class AuthControllerTest {
     @Test
     @DisplayName("tokens - AccountRevokedException")
     fun tokens6() {
-        doThrow(AccountRevokedException(request = httpServletRequest, authTokenType = AuthTokenType.BASIC))
+        doThrow(AccountRevokedException(message = "", request = httpServletRequest, authTokenType = AuthTokenType.BASIC))
             .whenever(tokenService)
             .getTokensByUserCredentials(any())
 
@@ -164,7 +164,7 @@ class AuthControllerTest {
     @Test
     @DisplayName("refresh - NoSuchAuthHeaderException")
     fun refresh2() {
-        doThrow(NoSuchAuthHeaderException(request = httpServletRequest, authTokenType = AuthTokenType.BEARER))
+        doThrow(NoSuchAuthHeaderException(message = "", request = httpServletRequest, authTokenType = AuthTokenType.BEARER))
             .whenever(tokenService)
             .getTokensByRefreshToken(any())
 
@@ -178,7 +178,7 @@ class AuthControllerTest {
     @Test
     @DisplayName("refresh - InvalidAuthHeaderTypeException")
     fun refresh3() {
-        doThrow(InvalidAuthHeaderTypeException(request = httpServletRequest, authTokenType = AuthTokenType.BEARER))
+        doThrow(InvalidAuthHeaderTypeException(message = "", request = httpServletRequest, authTokenType = AuthTokenType.BEARER))
             .whenever(tokenService)
             .getTokensByRefreshToken(any())
 
@@ -192,7 +192,7 @@ class AuthControllerTest {
     @Test
     @DisplayName("refresh - PlatformNotFoundException")
     fun refresh4() {
-        doThrow(PlatformNotFoundException(request = httpServletRequest))
+        doThrow(PlatformNotFoundException(message = "", request = httpServletRequest))
             .whenever(tokenService)
             .getTokensByRefreshToken(any())
 
@@ -209,7 +209,7 @@ class AuthControllerTest {
     @Test
     @DisplayName("refresh - AccountRevokedException")
     fun refresh5() {
-        doThrow(AccountRevokedException(request = httpServletRequest, authTokenType = AuthTokenType.BEARER))
+        doThrow(AccountRevokedException(message = "", request = httpServletRequest, authTokenType = AuthTokenType.BEARER))
             .whenever(tokenService)
             .getTokensByRefreshToken(any())
 
@@ -226,7 +226,7 @@ class AuthControllerTest {
     @Test
     @DisplayName("refresh - BearerTokenWrongTypeException")
     fun refresh6() {
-        doThrow(BearerTokenWrongTypeException(request = httpServletRequest))
+        doThrow(BearerTokenWrongTypeException(message = "", request = httpServletRequest))
             .whenever(tokenService)
             .getTokensByRefreshToken(any())
 
@@ -243,7 +243,7 @@ class AuthControllerTest {
     @Test
     @DisplayName("refresh - RefreshTokenExpiredException")
     fun refresh7() {
-        doThrow(RefreshTokenExpiredException(request = httpServletRequest))
+        doThrow(RefreshTokenExpiredException(message = "", request = httpServletRequest))
             .whenever(tokenService)
             .getTokensByRefreshToken(any())
 

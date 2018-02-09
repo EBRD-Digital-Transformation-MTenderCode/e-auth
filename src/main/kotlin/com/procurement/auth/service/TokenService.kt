@@ -60,7 +60,7 @@ constructor(
         val decodedToken = String(Base64.decodeBase64(token))
         val colonPosition = decodedToken.indexOf(":")
         if (colonPosition == -1) {
-            throw InvalidUserCredentialsTokenException(requet)
+            throw InvalidUserCredentialsTokenException("Invalid format 'Basic' token.", requet)
         }
         val username = decodedToken.substring(0, colonPosition)
         val password = decodedToken.substring(colonPosition + 1)
@@ -71,10 +71,10 @@ constructor(
         try {
             verifier.verify(this.getBearerToken())
         } catch (ex: TokenExpiredException) {
-            throw RefreshTokenExpiredException(this)
+            throw RefreshTokenExpiredException("The refresh token expired.", this)
         }.also {
             if (it.isNotRefreshToken()) {
-                throw BearerTokenWrongTypeException(this)
+                throw BearerTokenWrongTypeException("The bearer token of wrong type.", this)
             }
         }
 

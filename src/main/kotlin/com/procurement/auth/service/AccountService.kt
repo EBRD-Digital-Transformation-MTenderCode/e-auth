@@ -25,24 +25,24 @@ class AccountServiceImpl(private val cryptPasswordEncoder: BCryptPasswordEncoder
         return accountRepository.findByUserCredentials(credentials.username)?.also {
             it.validatePassword(request, credentials.password)
             it.checkRevoked(request, AuthTokenType.BASIC)
-        } ?: throw AccountNotFoundException(request)
+        } ?: throw AccountNotFoundException("Account with username: '${credentials.username}' not found.", request)
     }
 
     override fun findByPlatformId(request: HttpServletRequest, platformId: UUID): Account {
         return accountRepository.findByPlatformId(platformId)?.also {
             it.checkRevoked(request, AuthTokenType.BEARER)
-        } ?: throw PlatformNotFoundException(request)
+        } ?: throw PlatformNotFoundException("Platform with id: '$platformId' not found.", request)
     }
 
     private fun Account.validatePassword(request: HttpServletRequest, password: String) {
         if (!cryptPasswordEncoder.matches(password, this.hashPassword)) {
-            throw InvalidUserCredentialsException(request)
+            throw InvalidUserCredentialsException("Invalid credentials for user: '${this.username}'.", request)
         }
     }
 
     private fun Account.checkRevoked(request: HttpServletRequest, authTokenType: AuthTokenType) {
         if (!this.enabled) {
-            throw AccountRevokedException(request, authTokenType)
+            throw AccountRevokedException("The account for username: '${this.username}' revoked.", request, authTokenType)
         }
     }
 }

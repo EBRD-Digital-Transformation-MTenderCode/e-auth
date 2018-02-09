@@ -23,13 +23,13 @@ class WebExceptionHandler : ResponseEntityExceptionHandler() {
     fun noSuchAuthHeaderException(e: NoSuchAuthHeaderException): ResponseEntity<*> =
         when (e.authTokenType) {
             AuthTokenType.BASIC -> {
-                log.warn("There is no 'Basic' authentication header.", e)
+                log.warn(e.message)
                 ResponseEntity.status(HttpStatus.UNAUTHORIZED.value())
                     .header(HEADER_NAME_WWW_AUTHENTICATE, BASIC_REALM)
                     .build<Any>()
             }
             AuthTokenType.BEARER -> {
-                log.warn("There is no 'Bearer' authentication header.", e)
+                log.warn(e.message)
                 ResponseEntity.status(HttpStatus.UNAUTHORIZED.value())
                     .header(HEADER_NAME_WWW_AUTHENTICATE, BEARER_REALM)
                     .build<Any>()
@@ -40,13 +40,13 @@ class WebExceptionHandler : ResponseEntityExceptionHandler() {
     fun invalidAuthHeaderTypeException(e: InvalidAuthHeaderTypeException): ResponseEntity<*> =
         when (e.authTokenType) {
             AuthTokenType.BASIC -> {
-                log.warn("Invalid authentication type, requires a 'Basic' authentication type.", e)
+                log.warn(e.message)
                 ResponseEntity.status(HttpStatus.UNAUTHORIZED.value())
                     .header(HEADER_NAME_WWW_AUTHENTICATE, BASIC_REALM)
                     .build<Any>()
             }
             AuthTokenType.BEARER -> {
-                log.warn("Invalid authentication type, requires a 'Bearer' authentication type.", e)
+                log.warn(e.message)
                 ResponseEntity.status(HttpStatus.UNAUTHORIZED.value())
                     .header(HEADER_NAME_WWW_AUTHENTICATE, BEARER_REALM)
                     .build<Any>()
@@ -55,7 +55,7 @@ class WebExceptionHandler : ResponseEntityExceptionHandler() {
 
     @ExceptionHandler(value = [InvalidUserCredentialsTokenException::class])
     fun invalidUserCredentialsTokenException(e: InvalidUserCredentialsTokenException): ResponseEntity<*> {
-        log.warn("Invalid format 'Basic' token.", e)
+        log.warn(e.message)
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED.value())
             .header(HEADER_NAME_WWW_AUTHENTICATE, BASIC_REALM)
             .build<Any>()
@@ -63,7 +63,7 @@ class WebExceptionHandler : ResponseEntityExceptionHandler() {
 
     @ExceptionHandler(value = [AccountNotFoundException::class])
     fun accountNotFoundException(e: AccountNotFoundException): ResponseEntity<*> {
-        log.warn("Account not found.", e)
+        log.warn(e.message)
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED.value())
             .header(HEADER_NAME_WWW_AUTHENTICATE, BASIC_REALM)
             .build<Any>()
@@ -71,7 +71,7 @@ class WebExceptionHandler : ResponseEntityExceptionHandler() {
 
     @ExceptionHandler(value = [PlatformNotFoundException::class])
     fun platformNotFoundException(e: PlatformNotFoundException): ResponseEntity<*> {
-        log.warn("Platform not found.", e)
+        log.warn(e.message)
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED.value())
             .header(
                 HEADER_NAME_WWW_AUTHENTICATE,
@@ -82,7 +82,7 @@ class WebExceptionHandler : ResponseEntityExceptionHandler() {
 
     @ExceptionHandler(value = [InvalidUserCredentialsException::class])
     fun invalidPasswordException(e: InvalidUserCredentialsException): ResponseEntity<*> {
-        log.warn("Invalid user credentials.", e)
+        log.warn(e.message)
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED.value())
             .header(HEADER_NAME_WWW_AUTHENTICATE, BASIC_REALM)
             .build<Any>()
@@ -90,7 +90,7 @@ class WebExceptionHandler : ResponseEntityExceptionHandler() {
 
     @ExceptionHandler(value = [AccountRevokedException::class])
     fun accountRevokedException(e: AccountRevokedException): ResponseEntity<*> {
-        log.warn("The account revoked.", e)
+        log.warn(e.message)
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED.value())
             .header(
                 HEADER_NAME_WWW_AUTHENTICATE,
@@ -104,7 +104,7 @@ class WebExceptionHandler : ResponseEntityExceptionHandler() {
 
     @ExceptionHandler(value = [BearerTokenWrongTypeException::class])
     fun bearerTokenWrongTypeException(e: BearerTokenWrongTypeException): ResponseEntity<*> {
-        log.warn("The bearer token of wrong type.", e)
+        log.warn(e.message)
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED.value())
             .header(
                 HEADER_NAME_WWW_AUTHENTICATE,
@@ -115,7 +115,7 @@ class WebExceptionHandler : ResponseEntityExceptionHandler() {
 
     @ExceptionHandler(value = [RefreshTokenExpiredException::class])
     fun refreshTokenExpiredException(e: RefreshTokenExpiredException): ResponseEntity<*> {
-        log.warn("The token expired.", e)
+        log.warn(e.message)
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED.value())
             .header(
                 HEADER_NAME_WWW_AUTHENTICATE,

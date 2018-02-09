@@ -148,7 +148,7 @@ class TokenServiceTest {
     fun getTokensByUserCredentials4() {
         httpServletRequest.addHeader(HEADER_NAME_AUTHORIZATION, genBasicToken())
 
-        doThrow(AccountNotFoundException(request = httpServletRequest))
+        doThrow(AccountNotFoundException(message = "", request = httpServletRequest))
             .whenever(accountService)
             .findByUserCredentials(any(), any())
 
@@ -166,7 +166,7 @@ class TokenServiceTest {
     fun getTokensByUserCredentials5() {
         httpServletRequest.addHeader(HEADER_NAME_AUTHORIZATION, genBasicToken())
 
-        doThrow(AccountRevokedException(request = httpServletRequest, authTokenType = AuthTokenType.BASIC))
+        doThrow(AccountRevokedException(message = "", request = httpServletRequest, authTokenType = AuthTokenType.BASIC))
             .whenever(accountService)
             .findByUserCredentials(any(), any())
 
@@ -277,7 +277,7 @@ class TokenServiceTest {
                                      AUTHORIZATION_PREFIX_BEARER + genRefreshToken(LocalDateTime.now())
         )
 
-        doThrow(AccountRevokedException(request = httpServletRequest, authTokenType = AuthTokenType.BEARER))
+        doThrow(AccountRevokedException(message = "", request = httpServletRequest, authTokenType = AuthTokenType.BEARER))
             .whenever(accountService)
             .findByPlatformId(eq(httpServletRequest), eq(PLATFORM_ID))
 
@@ -298,7 +298,7 @@ class TokenServiceTest {
                                      AUTHORIZATION_PREFIX_BEARER + genRefreshToken(LocalDateTime.now())
         )
 
-        doThrow(PlatformNotFoundException(request = httpServletRequest))
+        doThrow(PlatformNotFoundException(message = "", request = httpServletRequest))
             .whenever(accountService)
             .findByPlatformId(eq(httpServletRequest), eq(PLATFORM_ID))
 

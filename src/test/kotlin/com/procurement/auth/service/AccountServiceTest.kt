@@ -71,7 +71,7 @@ class AccountServiceTest {
     @Test
     @DisplayName("findByUserCredentials - AccountNotFoundException")
     fun findByUserCredentials1() {
-        doThrow(AccountNotFoundException(request = httpServletRequest))
+        doThrow(AccountNotFoundException(message = "", request = httpServletRequest))
             .whenever(accountRepository)
             .findByUserCredentials(anyString())
 
@@ -151,7 +151,7 @@ class AccountServiceTest {
     @Test
     @DisplayName("findByPlatformId - PlatformNotFoundException")
     fun findByPlatformId1() {
-        doThrow(PlatformNotFoundException(request = httpServletRequest))
+        doThrow(PlatformNotFoundException(message = "", request = httpServletRequest))
             .whenever(accountRepository)
             .findByPlatformId(PLATFORM_ID)
 
