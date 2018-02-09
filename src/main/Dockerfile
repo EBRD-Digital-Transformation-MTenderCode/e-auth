@@ -2,8 +2,8 @@ FROM openjdk:8-jre-alpine
 
 RUN mkdir maven && mkdir maven/config
 COPY maven/ /maven/
-COPY /artifact_runner.sh maven/
-COPY /logback.xml maven/config/
+COPY /scripts/artifact_runner.sh maven/
+COPY /resources/logback.xml maven/config/
 
 EXPOSE ${project.service.port}
 

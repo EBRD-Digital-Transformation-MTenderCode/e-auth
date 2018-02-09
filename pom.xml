@@ -361,7 +361,7 @@
                             <registry>${docker-registry}</registry>
                             <name>${docker-registry}/${project.artifactId}:${project.version}</name>
                             <build>
-                                <dockerFileDir>${project.basedir}/src/main/docker</dockerFileDir>
+                                <dockerFileDir>${project.basedir}/src/main</dockerFileDir>
                                 <nocache/>
                                 <assembly>
                                     <descriptorRef>artifact</descriptorRef>
