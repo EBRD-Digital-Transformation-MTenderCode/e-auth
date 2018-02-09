@@ -3,6 +3,7 @@ package com.procurement.auth.service
 import com.procurement.auth.exception.security.AccountNotFoundException
 import com.procurement.auth.exception.security.AccountRevokedException
 import com.procurement.auth.exception.security.InvalidUserCredentialsException
+import com.procurement.auth.exception.security.PlatformNotFoundException
 import com.procurement.auth.model.Account
 import com.procurement.auth.model.UserCredentials
 import com.procurement.auth.model.token.AuthTokenType
@@ -30,7 +31,7 @@ class AccountServiceImpl(private val cryptPasswordEncoder: BCryptPasswordEncoder
     override fun findByPlatformId(request: HttpServletRequest, platformId: UUID): Account {
         return accountRepository.findByPlatformId(platformId)?.also {
             it.checkRevoked(request, AuthTokenType.BEARER)
-        } ?: throw AccountNotFoundException(request)
+        } ?: throw PlatformNotFoundException(request)
     }
 
     private fun Account.validatePassword(request: HttpServletRequest, password: String) {
