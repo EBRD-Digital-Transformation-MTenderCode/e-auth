@@ -61,13 +61,15 @@
         </encoder>
     </appender>
 
-
     <logger name="com.procurement.auth" level="WARN" additivity="false">
-        <appender-ref ref="STDOUT"/>
         <appender-ref ref="FILE"/>
         <appender-ref ref="ELK"/>
     </logger>
 
+    <logger name="org.springframework" level="WARN" additivity="false">
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="ELK"/>
+    </logger>
 
     <root level="INFO">
         <appender-ref ref="STDOUT" additivity="false"/>
