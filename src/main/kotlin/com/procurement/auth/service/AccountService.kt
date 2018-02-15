@@ -4,10 +4,13 @@ import com.procurement.auth.exception.security.AccountNotFoundException
 import com.procurement.auth.exception.security.AccountRevokedException
 import com.procurement.auth.exception.security.InvalidUserCredentialsException
 import com.procurement.auth.exception.security.PlatformNotFoundException
+import com.procurement.auth.logging.MDCKey
+import com.procurement.auth.logging.mdc
 import com.procurement.auth.model.Account
 import com.procurement.auth.model.UserCredentials
 import com.procurement.auth.model.token.AuthTokenType
 import com.procurement.auth.repository.AccountRepository
+import org.slf4j.MDC
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import java.util.*
 import javax.servlet.http.HttpServletRequest
@@ -22,27 +25,29 @@ class AccountServiceImpl(private val cryptPasswordEncoder: BCryptPasswordEncoder
 ) : AccountService {
 
     override fun findByUserCredentials(request: HttpServletRequest, credentials: UserCredentials): Account {
+        mdc(MDCKey.USERNAME, credentials.username)
         return accountRepository.findByUserCredentials(credentials.username)?.also {
             it.validatePassword(request, credentials.password)
             it.checkRevoked(request, AuthTokenType.BASIC)
-        } ?: throw AccountNotFoundException("Account with username: '${credentials.username}' not found.", request)
+        } ?: throw AccountNotFoundException("Account not found.", request)
     }
 
     override fun findByPlatformId(request: HttpServletRequest, platformId: UUID): Account {
+        mdc(MDCKey.PLATFORM_ID, platformId.toString())
         return accountRepository.findByPlatformId(platformId)?.also {
             it.checkRevoked(request, AuthTokenType.BEARER)
-        } ?: throw PlatformNotFoundException("Platform with id: '$platformId' not found.", request)
+        } ?: throw PlatformNotFoundException("Platform not found.", request)
     }
 
     private fun Account.validatePassword(request: HttpServletRequest, password: String) {
         if (!cryptPasswordEncoder.matches(password, this.hashPassword)) {
-            throw InvalidUserCredentialsException("Invalid credentials for user: '${this.username}'.", request)
+            throw InvalidUserCredentialsException("Invalid credentials.", request)
         }
     }
 
     private fun Account.checkRevoked(request: HttpServletRequest, authTokenType: AuthTokenType) {
         if (!this.enabled) {
-            throw AccountRevokedException("The account for username: '${this.username}' revoked.", request, authTokenType)
+            throw AccountRevokedException("The account is revoked.", request, authTokenType)
         }
     }
 }

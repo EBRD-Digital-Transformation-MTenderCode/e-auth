@@ -1,18 +1,13 @@
 package com.procurement.auth.filter
 
-import com.procurement.auth.model.HEADER_NAME_AUTHORIZATION
-import org.slf4j.MDC
+import com.procurement.auth.logging.MDCKey
+import com.procurement.auth.logging.mdc
 import javax.servlet.*
 import javax.servlet.annotation.WebFilter
 import javax.servlet.http.HttpServletRequest
 
 @WebFilter(urlPatterns = ["/*"])
 class AuthorizationInfoServletFilter : Filter {
-    companion object {
-        private const val REMOTE_ADDRESS = "remoteAddr"
-        private const val AUTHORIZATION = "authorization"
-    }
-
     override fun init(arg0: FilterConfig) {}
 
     override fun destroy() {}
@@ -23,15 +18,12 @@ class AuthorizationInfoServletFilter : Filter {
         chain: FilterChain
     ) {
         with(request as HttpServletRequest) {
-            MDC.put(REMOTE_ADDRESS, remoteAddr)
-            MDC.put(AUTHORIZATION, getHeader(HEADER_NAME_AUTHORIZATION) ?: "none")
-        }
-
-        try {
-            chain.doFilter(request, response)
-        } finally {
-            MDC.remove(REMOTE_ADDRESS)
-            MDC.remove(AUTHORIZATION)
+            val uri = requestURI + (queryString?.let { "?" + it } ?: "")
+            mdc(
+                MDCKey.REMOTE_ADDRESS to remoteAddr,
+                MDCKey.HTTP_METHOD to method,
+                MDCKey.REQUEST_URI to uri
+            ) { chain.doFilter(request, response) }
         }
     }
 }
