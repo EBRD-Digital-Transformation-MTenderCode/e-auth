@@ -1,0 +1,117 @@
+= *Refresh tokens*
+== Request
+include::../../../target/generated-snippets/refresh/success/http-request.adoc[]
+
+== Request headers
+include::../../../target/generated-snippets/refresh/success/request-headers.adoc[]
+
+== Response structure
+include::../../../target/generated-snippets/refresh/success/http-response.adoc[]
+== Response fields
+include::../../../target/generated-snippets/refresh/success/response-fields.adoc[]
+
+== Errors
+
+=== No such the authentication header
+
+====
+*Request*
+include::../../../target/generated-snippets/refresh/errors/no_such_auth_header/http-request.adoc[]
+*Response*
+include::../../../target/generated-snippets/refresh/errors/no_such_auth_header/http-response.adoc[]
+*Response headers*
+include::../../../target/generated-snippets/refresh/errors/no_such_auth_header/response-headers.adoc[]
+*Response fields*
+include::../../../target/generated-snippets/refresh/errors/no_such_auth_header/response-fields.adoc[]
+====
+
+=== Invalid type the authentication header
+
+====
+*Request*
+include::../../../target/generated-snippets/refresh/errors/invalid_type_auth_header/http-request.adoc[]
+*Response*
+include::../../../target/generated-snippets/refresh/errors/invalid_type_auth_header/http-response.adoc[]
+*Response headers*
+include::../../../target/generated-snippets/refresh/errors/invalid_type_auth_header/response-headers.adoc[]
+*Response fields*
+include::../../../target/generated-snippets/refresh/errors/invalid_type_auth_header/response-fields.adoc[]
+====
+
+=== The authentication token is empty
+
+====
+*Request*
+include::../../../target/generated-snippets/refresh/errors/auth_token_is_empty/http-request.adoc[]
+*Response*
+include::../../../target/generated-snippets/refresh/errors/auth_token_is_empty/http-response.adoc[]
+*Response headers*
+include::../../../target/generated-snippets/refresh/errors/auth_token_is_empty/response-headers.adoc[]
+*Response fields*
+include::../../../target/generated-snippets/refresh/errors/auth_token_is_empty/response-fields.adoc[]
+====
+
+=== Invalid type of the refresh token
+
+====
+*Request*
+include::../../../target/generated-snippets/refresh/errors/invalid_type_token/http-request.adoc[]
+*Response*
+include::../../../target/generated-snippets/refresh/errors/invalid_type_token/http-response.adoc[]
+*Response headers*
+include::../../../target/generated-snippets/refresh/errors/invalid_type_token/response-headers.adoc[]
+*Response fields*
+include::../../../target/generated-snippets/refresh/errors/invalid_type_token/response-fields.adoc[]
+====
+
+=== The error of verification of the refresh token
+
+====
+*Request*
+include::../../../target/generated-snippets/refresh/errors/invalid_signature/http-request.adoc[]
+*Response*
+include::../../../target/generated-snippets/refresh/errors/invalid_signature/http-response.adoc[]
+*Response headers*
+include::../../../target/generated-snippets/refresh/errors/invalid_signature/response-headers.adoc[]
+*Response fields*
+include::../../../target/generated-snippets/refresh/errors/invalid_signature/response-fields.adoc[]
+====
+
+=== The refresh-token has expired
+
+====
+*Request*
+include::../../../target/generated-snippets/refresh/errors/auth_token_is_expired/http-request.adoc[]
+*Response*
+include::../../../target/generated-snippets/refresh/errors/auth_token_is_expired/http-response.adoc[]
+*Response headers*
+include::../../../target/generated-snippets/refresh/errors/auth_token_is_expired/response-headers.adoc[]
+*Response fields*
+include::../../../target/generated-snippets/refresh/errors/auth_token_is_expired/response-fields.adoc[]
+====
+
+=== The platform not found
+
+====
+*Request*
+include::../../../target/generated-snippets/refresh/errors/platform_not_found/http-request.adoc[]
+*Response*
+include::../../../target/generated-snippets/refresh/errors/platform_not_found/http-response.adoc[]
+*Response headers*
+include::../../../target/generated-snippets/refresh/errors/platform_not_found/response-headers.adoc[]
+*Response fields*
+include::../../../target/generated-snippets/refresh/errors/platform_not_found/response-fields.adoc[]
+====
+
+=== The account is revoked
+
+====
+*Request*
+include::../../../target/generated-snippets/refresh/errors/account_is_revoked/http-request.adoc[]
+*Response*
+include::../../../target/generated-snippets/refresh/errors/account_is_revoked/http-response.adoc[]
+*Response headers*
+include::../../../target/generated-snippets/refresh/errors/account_is_revoked/response-headers.adoc[]
+*Response fields*
+include::../../../target/generated-snippets/refresh/errors/account_is_revoked/response-fields.adoc[]
+====

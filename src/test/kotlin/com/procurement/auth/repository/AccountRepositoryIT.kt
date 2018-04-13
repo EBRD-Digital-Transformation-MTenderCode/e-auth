@@ -22,7 +22,7 @@ import javax.sql.DataSource
 
 @ExtendWith(SpringExtension::class)
 @ContextConfiguration(classes = [DatabaseTestConfiguration::class])
-class AccountRepositoryTest {
+class AccountRepositoryIT {
     companion object {
         private const val ID = 1L
         private const val USERNAME = "USER-1"

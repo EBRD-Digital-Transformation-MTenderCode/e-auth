@@ -3,26 +3,25 @@ package com.procurement.auth.service
 import com.auth0.jwt.JWT
 import com.auth0.jwt.JWTVerifier
 import com.auth0.jwt.algorithms.Algorithm
-import com.auth0.jwt.exceptions.TokenExpiredException
 import com.auth0.jwt.interfaces.DecodedJWT
 import com.procurement.auth.configuration.properties.RSAKeyProperties
-import com.procurement.auth.exception.security.BearerTokenWrongTypeException
-import com.procurement.auth.exception.security.InvalidUserCredentialsTokenException
-import com.procurement.auth.exception.security.RefreshTokenExpiredException
-import com.procurement.auth.helper.*
+import com.procurement.auth.exception.security.TokenExpiredException
+import com.procurement.auth.exception.security.VerificationTokenException
+import com.procurement.auth.exception.security.WrongTypeRefreshTokenException
+import com.procurement.auth.helper.genAccessToken
+import com.procurement.auth.helper.genExpiresOn
+import com.procurement.auth.helper.genRefreshToken
 import com.procurement.auth.model.*
 import com.procurement.auth.model.token.AuthTokens
 import com.procurement.auth.security.RSAService
-import org.apache.commons.codec.binary.Base64
 import java.security.spec.InvalidKeySpecException
 import java.time.LocalDateTime
 import java.util.*
-import javax.servlet.http.HttpServletRequest
 
 interface TokenService {
-    fun getTokensByUserCredentials(request: HttpServletRequest): AuthTokens
+    fun getTokensByUserCredentials(userCredentials: UserCredentials): AuthTokens
 
-    fun getTokensByRefreshToken(request: HttpServletRequest): AuthTokens
+    fun getTokensByRefreshToken(token: String): AuthTokens
 }
 
 class TokenServiceImpl
@@ -42,39 +41,28 @@ constructor(
         verifier = JWT.require(algorithm).build()
     }
 
-    override fun getTokensByUserCredentials(request: HttpServletRequest): AuthTokens {
-        val token = request.getBasicToken()
-        val userCredentials = getUserCredentials(request, token)
-        val account = accountService.findByUserCredentials(request, userCredentials)
+    override fun getTokensByUserCredentials(userCredentials: UserCredentials): AuthTokens {
+        val account = accountService.findByUserCredentials(userCredentials)
         return genTokens(account)
     }
 
-    override fun getTokensByRefreshToken(request: HttpServletRequest): AuthTokens {
-        val jwt = request.getJWT()
+    override fun getTokensByRefreshToken(token: String): AuthTokens {
+        val jwt = token.toJWT()
         val platformId = jwt.getPlatformId()
-        val account = accountService.findByPlatformId(request, platformId)
+        val account = accountService.findByPlatformId(platformId)
         return genTokens(account)
     }
 
-    private fun getUserCredentials(requet: HttpServletRequest, token: String): UserCredentials {
-        val decodedToken = String(Base64.decodeBase64(token))
-        val colonPosition = decodedToken.indexOf(":")
-        if (colonPosition == -1) {
-            throw InvalidUserCredentialsTokenException("Invalid format 'Basic' token.", requet)
-        }
-        val username = decodedToken.substring(0, colonPosition)
-        val password = decodedToken.substring(colonPosition + 1)
-        return UserCredentials(username, password)
-    }
-
-    private fun HttpServletRequest.getJWT() =
+    private fun String.toJWT() =
         try {
-            verifier.verify(this.getBearerToken())
-        } catch (ex: TokenExpiredException) {
-            throw RefreshTokenExpiredException("The refresh token expired.", this)
+            verifier.verify(this)
+        } catch (ex: com.auth0.jwt.exceptions.TokenExpiredException) {
+            throw TokenExpiredException("The refresh token is expired.")
+        } catch (ex: Exception) {
+            throw VerificationTokenException("Error of verification the token.", ex)
         }.also {
             if (it.isNotRefreshToken()) {
-                throw BearerTokenWrongTypeException("The bearer token of wrong type.", this)
+                throw WrongTypeRefreshTokenException("Invalid the token type.")
             }
         }
 
