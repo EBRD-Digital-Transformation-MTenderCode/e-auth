@@ -1,9 +1,8 @@
 package com.procurement.auth.service
 
-import com.procurement.auth.exception.security.AccountNotFoundException
 import com.procurement.auth.exception.security.AccountRevokedException
 import com.procurement.auth.exception.security.InvalidCredentialsException
-import com.procurement.auth.exception.security.PlatformNotFoundException
+import com.procurement.auth.exception.security.PlatformUnknownException
 import com.procurement.auth.logging.MDCKey
 import com.procurement.auth.logging.mdc
 import com.procurement.auth.model.Account
@@ -11,7 +10,6 @@ import com.procurement.auth.model.UserCredentials
 import com.procurement.auth.repository.AccountRepository
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import java.util.*
-import javax.servlet.http.HttpServletRequest
 
 interface AccountService {
     fun findByUserCredentials(credentials: UserCredentials): Account
@@ -30,7 +28,7 @@ class AccountServiceImpl(
                 it.validatePassword(credentials.password)
                 it.checkRevoked()
             }
-            ?: throw AccountNotFoundException("Account not found.")
+            ?: throw InvalidCredentialsException("The account is unknown.")
     }
 
     override fun findByPlatformId(platformId: UUID): Account {
@@ -39,7 +37,7 @@ class AccountServiceImpl(
             ?.also {
                 it.checkRevoked()
             }
-            ?: throw PlatformNotFoundException("Platform not found.")
+            ?: throw PlatformUnknownException("Platform not found.")
     }
 
     private fun Account.validatePassword(password: String) {

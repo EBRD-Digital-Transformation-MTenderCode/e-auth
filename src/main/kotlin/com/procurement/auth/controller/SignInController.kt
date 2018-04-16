@@ -29,8 +29,8 @@ class SignInController(
             value = AUTHORIZATION_HEADER_NAME,
             required = false,
             defaultValue = "") authorizationHeader: String): ResponseEntity<TokenRS> {
-        val token = getUserCredentialsByAuthHeader(authorizationHeader)
-        val authTokens = tokenService.getTokensByUserCredentials(token)
+        val userCredentials = getUserCredentialsByAuthHeader(authorizationHeader)
+        val authTokens = tokenService.getTokensByUserCredentials(userCredentials)
         return ResponseEntity.ok()
             .body(
                 TokenRS(
@@ -123,23 +123,6 @@ class SignInController(
                         com.procurement.auth.model.response.Error(
                             code = "account.invalidCredentials",
                             description = "Invalid credentials."
-                        )
-                    )
-                )
-            )
-    }
-
-    @ExceptionHandler(value = [AccountNotFoundException::class])
-    fun accountNotFound(e: AccountNotFoundException): ResponseEntity<BaseRS> {
-        log.warn(e.message)
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED.value())
-            .header(WWW_AUTHENTICATE_HEADER_NAME, BASIC_REALM)
-            .body(
-                ErrorRS(
-                    listOf(
-                        com.procurement.auth.model.response.Error(
-                            code = "account.notFound",
-                            description = "Account not found."
                         )
                     )
                 )

@@ -90,17 +90,17 @@ include::../../../target/generated-snippets/refresh/errors/auth_token_is_expired
 include::../../../target/generated-snippets/refresh/errors/auth_token_is_expired/response-fields.adoc[]
 ====
 
-=== The platform not found
+=== The platform is unknown
 
 ====
 *Request*
-include::../../../target/generated-snippets/refresh/errors/platform_not_found/http-request.adoc[]
+include::../../../target/generated-snippets/refresh/errors/platform_is_unknown/http-request.adoc[]
 *Response*
-include::../../../target/generated-snippets/refresh/errors/platform_not_found/http-response.adoc[]
+include::../../../target/generated-snippets/refresh/errors/platform_is_unknown/http-response.adoc[]
 *Response headers*
-include::../../../target/generated-snippets/refresh/errors/platform_not_found/response-headers.adoc[]
+include::../../../target/generated-snippets/refresh/errors/platform_is_unknown/response-headers.adoc[]
 *Response fields*
-include::../../../target/generated-snippets/refresh/errors/platform_not_found/response-fields.adoc[]
+include::../../../target/generated-snippets/refresh/errors/platform_is_unknown/response-fields.adoc[]
 ====
 
 === The account is revoked

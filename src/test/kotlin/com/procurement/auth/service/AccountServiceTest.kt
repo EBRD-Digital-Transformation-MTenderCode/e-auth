@@ -2,10 +2,9 @@ package com.procurement.auth.service
 
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
-import com.procurement.auth.exception.security.AccountNotFoundException
 import com.procurement.auth.exception.security.AccountRevokedException
 import com.procurement.auth.exception.security.InvalidCredentialsException
-import com.procurement.auth.exception.security.PlatformNotFoundException
+import com.procurement.auth.exception.security.PlatformUnknownException
 import com.procurement.auth.model.Account
 import com.procurement.auth.model.UserCredentials
 import com.procurement.auth.repository.AccountRepository
@@ -64,13 +63,13 @@ class AccountServiceTest {
     }
 
     @Test
-    @DisplayName("findByUserCredentials - AccountNotFoundException")
+    @DisplayName("The account is unknown (InvalidCredentialsException)")
     fun findByUserCredentials1() {
         whenever(accountRepository.findByUserCredentials(anyString()))
             .thenReturn(null)
 
         assertThrows(
-            AccountNotFoundException::class.java,
+            InvalidCredentialsException::class.java,
             {
                 service.findByUserCredentials(credentials)
             }
@@ -78,7 +77,7 @@ class AccountServiceTest {
     }
 
     @Test
-    @DisplayName("findByUserCredentials - InvalidCredentialsException")
+    @DisplayName("Invalid password (InvalidCredentialsException)")
     fun findByUserCredentials2() {
         val accountEntity = Account(
             id = ID,
@@ -99,7 +98,7 @@ class AccountServiceTest {
     }
 
     @Test
-    @DisplayName("findByUserCredentials - AccountRevokedException")
+    @DisplayName("The account is revoked")
     fun findByUserCredentials3() {
         val accountEntity = Account(
             id = ID,
@@ -142,13 +141,13 @@ class AccountServiceTest {
     }
 
     @Test
-    @DisplayName("findByPlatformId - PlatformNotFoundException")
+    @DisplayName("The platform is unknown")
     fun findByPlatformId1() {
         whenever(accountRepository.findByPlatformId(PLATFORM_ID))
             .thenReturn(null)
 
         assertThrows(
-            PlatformNotFoundException::class.java,
+            PlatformUnknownException::class.java,
             {
                 service.findByPlatformId(PLATFORM_ID)
             }

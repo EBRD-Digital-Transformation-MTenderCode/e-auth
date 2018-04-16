@@ -52,6 +52,10 @@ class TokenRefreshControllerTest {
             .setControllerAdvice(exceptionHandler)
             .apply<StandaloneMockMvcBuilder>(
                 MockMvcRestDocumentation.documentationConfiguration(restDocumentation)
+                    .uris()
+                    .withScheme("https")
+                    .withHost("eprocurement.systems")
+                    .and()
                     .snippets()
                     .withDefaults(HttpDocumentation.httpRequest(), HttpDocumentation.httpResponse())
                     .and()
@@ -254,14 +258,14 @@ class TokenRefreshControllerTest {
     }
 
     @Test
-    @DisplayName("The platform not found")
+    @DisplayName("The platform is unknown")
     fun platformNotFound() {
-        doThrow(PlatformNotFoundException(message = ""))
+        doThrow(PlatformUnknownException(message = ""))
             .whenever(tokenService)
             .getTokensByRefreshToken(any())
 
         val authHeaderValue = AUTHORIZATION_PREFIX_BEARER + REFRESH_TOKEN
-        val wwwAuthHeaderValue = """$BEARER_REALM, $ERROR_CODE_INVALID_TOKEN, error_message="The platform not found.""""
+        val wwwAuthHeaderValue = """$BEARER_REALM, $ERROR_CODE_INVALID_TOKEN, error_message="The platform is unknown.""""
         mockMvc.perform(
             get(URL)
                 .header(AUTHORIZATION_HEADER_NAME, authHeaderValue))
@@ -270,11 +274,11 @@ class TokenRefreshControllerTest {
             .andExpect(content().contentType("application/json;charset=UTF-8"))
             .andExpect(jsonPath("$.success", equalTo(false)))
             .andExpect(jsonPath("$.errors.length()", equalTo(1)))
-            .andExpect(jsonPath("$.errors[0].code", equalTo("account.platformNotFound")))
-            .andExpect(jsonPath("$.errors[0].description", equalTo("The platform not found.")))
+            .andExpect(jsonPath("$.errors[0].code", equalTo("account.platform.unknown")))
+            .andExpect(jsonPath("$.errors[0].description", equalTo("The platform is unknown.")))
             .andDo(
                 document(
-                    "refresh/errors/platform_not_found",
+                    "refresh/errors/platform_is_unknown",
                     requestHeaders(
                         ModelDescription.authHeader()
                     ),

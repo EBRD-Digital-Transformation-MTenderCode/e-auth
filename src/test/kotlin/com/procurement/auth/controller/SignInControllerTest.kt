@@ -5,7 +5,6 @@ import com.nhaarman.mockito_kotlin.doThrow
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
 import com.procurement.auth.*
-import com.procurement.auth.exception.security.AccountNotFoundException
 import com.procurement.auth.exception.security.AccountRevokedException
 import com.procurement.auth.exception.security.InvalidCredentialsException
 import com.procurement.auth.model.*
@@ -54,7 +53,6 @@ class SignInControllerTest {
                     .withHost("eprocurement.systems")
                     .and()
                     .snippets()
-//                    .withDefaults(httpRequest(), httpResponse())
                     .and()
                     .operationPreprocessors()
                     .withRequestDefaults(prettyPrint())
@@ -251,40 +249,6 @@ class SignInControllerTest {
             .andDo(
                 document(
                     "sign-in/errors/invalid_credentials",
-                    requestHeaders(
-                        ModelDescription.authHeader()
-                    ),
-                    responseHeaders(
-                        ModelDescription.wwwAuthHeader(wwwAuthHeaderValue)
-                    ),
-                    responseFields(ModelDescription.responseError())
-                )
-            )
-    }
-
-    @Test
-    @DisplayName("Account not found")
-    fun accountNotFound() {
-        doThrow(AccountNotFoundException(message = ""))
-            .whenever(tokenService)
-            .getTokensByUserCredentials(any())
-
-        val authHeaderValue =
-            AUTHORIZATION_PREFIX_BASIC + Base64.encodeBase64String(BASIC_CREDENTIALS.toByteArray())
-        val wwwAuthHeaderValue = BASIC_REALM
-        mockMvc.perform(
-            get(URL)
-                .header(AUTHORIZATION_HEADER_NAME, authHeaderValue))
-            .andExpect(status().isUnauthorized)
-            .andExpect(header().string(WWW_AUTHENTICATE_HEADER_NAME, wwwAuthHeaderValue))
-            .andExpect(content().contentType("application/json;charset=UTF-8"))
-            .andExpect(jsonPath("$.success", equalTo(false)))
-            .andExpect(jsonPath("$.errors.length()", equalTo(1)))
-            .andExpect(jsonPath("$.errors[0].code", equalTo("account.notFound")))
-            .andExpect(jsonPath("$.errors[0].description", equalTo("Account not found.")))
-            .andDo(
-                document(
-                    "sign-in/errors/account_not_found",
                     requestHeaders(
                         ModelDescription.authHeader()
                     ),

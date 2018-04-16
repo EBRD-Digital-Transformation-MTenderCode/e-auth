@@ -78,19 +78,6 @@ include::../../../target/generated-snippets/sign-in/errors/invalid_credentials/r
 include::../../../target/generated-snippets/sign-in/errors/invalid_credentials/response-fields.adoc[]
 ====
 
-=== The account not found
-
-====
-.Request
-include::../../../target/generated-snippets/sign-in/errors/account_not_found/http-request.adoc[]
-.Response
-include::../../../target/generated-snippets/sign-in/errors/account_not_found/http-response.adoc[]
-.Response headers
-include::../../../target/generated-snippets/sign-in/errors/account_not_found/response-headers.adoc[]
-.Response fields
-include::../../../target/generated-snippets/sign-in/errors/account_not_found/response-fields.adoc[]
-====
-
 === The account is revoked
 
 ====

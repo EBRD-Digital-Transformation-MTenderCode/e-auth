@@ -134,20 +134,20 @@ class TokenRefreshController(
             )
     }
 
-    @ExceptionHandler(value = [PlatformNotFoundException::class])
-    fun platformNotFound(e: PlatformNotFoundException): ResponseEntity<BaseRS> {
+    @ExceptionHandler(value = [PlatformUnknownException::class])
+    fun platformNotFound(e: PlatformUnknownException): ResponseEntity<BaseRS> {
         log.warn(e.message)
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED.value())
             .header(
                 WWW_AUTHENTICATE_HEADER_NAME,
-                """$BEARER_REALM, $ERROR_CODE_INVALID_TOKEN, error_message="The platform not found.""""
+                """$BEARER_REALM, $ERROR_CODE_INVALID_TOKEN, error_message="The platform is unknown.""""
             )
             .body(
                 ErrorRS(
                     listOf(
                         Error(
-                            code = "account.platformNotFound",
-                            description = "The platform not found."
+                            code = "account.platform.unknown",
+                            description = "The platform is unknown."
                         )
                     )
                 )

@@ -95,70 +95,6 @@ class TokenServiceTest {
         assertEquals(REFRESH_TOKEN_TYPE, jwtRefresh.getHeaderClaim(HEADER_NAME_TOKEN_TYPE).asString())
     }
 
-//    @Test
-//    @DisplayName("getTokensByUserCredentials - NoSuchAuthHeaderException")
-//    fun getTokensByUserCredentials1() {
-//        assertEquals(
-//            "There is not the authentication header.",
-//            assertThrows(
-//                NoSuchAuthHeaderException::class.java,
-//                {
-//                    val authHeader = ""
-//                    service.getTokensByUserCredentials(authHeader)
-//                }
-//            ).message
-//        )
-//    }
-
-//    @Test
-//    @DisplayName("getTokensByUserCredentials - InvalidBasicAuthHeaderTypeException")
-//    fun getTokensByUserCredentials2() {
-//        assertEquals(
-//            "Invalid type the authentication header. Requires 'Basic' type of the authentication header.",
-//            assertThrows(
-//                InvalidAuthHeaderTypeException::class.java,
-//                {
-//                    val authHeader = AUTHORIZATION_PREFIX_BEARER + "INVALID_TOKEN"
-//                    service.getTokensByUserCredentials(authHeader)
-//                }
-//            ).message
-//        )
-//    }
-
-//    @Test
-//    @DisplayName("getTokensByUserCredentials - InvalidAuthTokenFormatException")
-//    fun getTokensByUserCredentials3() {
-//        assertEquals(
-//            "Invalid format 'Basic' token.",
-//            assertThrows(
-//                InvalidAuthTokenFormatException::class.java,
-//                {
-//                    val authHeader = AUTHORIZATION_PREFIX_BASIC + "INVALID_CREDENTIALS"
-//                    service.getTokensByUserCredentials(authHeader)
-//                }
-//            ).message
-//        )
-//    }
-
-    @Test
-    @DisplayName("getTokensByUserCredentials - AccountNotFoundException")
-    fun getTokensByUserCredentials4() {
-        doThrow(AccountNotFoundException(message = ""))
-            .whenever(accountService)
-            .findByUserCredentials(any())
-
-        assertEquals(
-            "",
-            assertThrows(
-                AccountNotFoundException::class.java,
-                {
-                    val userCredentials = UserCredentials(USER_NAME, USER_PASSWORD)
-                    service.getTokensByUserCredentials(userCredentials)
-                }
-            ).message
-        )
-    }
-
     @Test
     @DisplayName("getTokensByUserCredentials - AccountRevokedException")
     fun getTokensByUserCredentials5() {
@@ -207,51 +143,6 @@ class TokenServiceTest {
         assertEquals("REFRESH", jwtRefresh.getHeaderClaim(HEADER_NAME_TOKEN_TYPE).asString())
     }
 
-//    @Test
-//    @DisplayName("getTokensByRefreshToken - NoSuchAuthorizationHeaderException")
-//    fun noSuchAuthHeader() {
-//        assertEquals(
-//            "There is not the authentication header.",
-//            assertThrows(
-//                NoSuchAuthHeaderException::class.java,
-//                {
-//                    val authHeader = ""
-//                    service.getTokensByRefreshToken(authHeader)
-//                }
-//            ).message
-//        )
-//    }
-
-//    @Test
-//    @DisplayName("getTokensByRefreshToken - InvalidAuthHeaderTypeException")
-//    fun invalidAuthHeaderType() {
-//        assertEquals(
-//            "Invalid type the authentication header. Requires 'Bearer' type of the authentication header.",
-//            assertThrows(
-//                InvalidAuthHeaderTypeException::class.java,
-//                {
-//                    val authHeader = AUTHORIZATION_PREFIX_BASIC + "INVALID_TOKEN"
-//                    service.getTokensByRefreshToken(authHeader)
-//                }
-//            ).message
-//        )
-//    }
-
-//    @Test
-//    @DisplayName("getTokensByRefreshToken - EmptyAuthTokenException")
-//    fun emptyAuthToken() {
-//        assertEquals(
-//            "The authentication token is empty.",
-//            assertThrows(
-//                EmptyAuthTokenException::class.java,
-//                {
-//                    val refreshToken = ""
-//                    service.getTokensByRefreshToken(refreshToken)
-//                }
-//            ).message
-//        )
-//    }
-
     @Test
     @DisplayName("getTokensByRefreshToken - TokenExpiredException")
     fun tokenExpired() {
@@ -275,7 +166,7 @@ class TokenServiceTest {
             assertThrows(
                 WrongTypeRefreshTokenException::class.java,
                 {
-                    val refreshToken =  genAccessToken(LocalDateTime.now())
+                    val refreshToken = genAccessToken(LocalDateTime.now())
                     service.getTokensByRefreshToken(refreshToken)
                 }
             ).message
@@ -318,16 +209,16 @@ class TokenServiceTest {
     }
 
     @Test
-    @DisplayName("getTokensByRefreshToken - PlatformNotFoundException")
+    @DisplayName("getTokensByRefreshToken - PlatformUnknownException")
     fun platformNotFound() {
-        doThrow(PlatformNotFoundException(message = ""))
+        doThrow(PlatformUnknownException(message = ""))
             .whenever(accountService)
             .findByPlatformId(eq(PLATFORM_ID))
 
         assertEquals(
             "",
             assertThrows(
-                PlatformNotFoundException::class.java,
+                PlatformUnknownException::class.java,
                 {
                     val refreshToken = genRefreshToken(LocalDateTime.now())
                     service.getTokensByRefreshToken(refreshToken)
@@ -337,9 +228,6 @@ class TokenServiceTest {
     }
 
     private fun genRSAKey() = RSAKeyGenerator().generate(2048)
-
-//    private fun genBasicToken() =
-//        AUTHORIZATION_PREFIX_BASIC + Base64.encodeBase64String(BASIC_CREDENTIALS.toByteArray())
 
     private fun genAccessToken(dateTime: LocalDateTime): String =
         genAccessToken(
