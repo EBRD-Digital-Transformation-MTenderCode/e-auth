@@ -34,7 +34,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.test.web.servlet.setup.StandaloneMockMvcBuilder
 
 @ExtendWith(RestDocumentationExtension::class)
-class TokenRefreshControllerTest {
+class TokenControllerTest {
     companion object {
         private const val URL = "/auth/refresh"
     }
@@ -46,7 +46,7 @@ class TokenRefreshControllerTest {
     fun init(restDocumentation: RestDocumentationContextProvider) {
         tokenService = mock()
 
-        val controller = TokenRefreshController(tokenService = tokenService)
+        val controller = TokenController(tokenService = tokenService)
         val exceptionHandler = WebExceptionHandler()
         mockMvc = MockMvcBuilders.standaloneSetup(controller)
             .setControllerAdvice(exceptionHandler)

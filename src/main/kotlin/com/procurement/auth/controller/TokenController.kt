@@ -16,12 +16,12 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/auth")
-class TokenRefreshController(
+class TokenController(
     private val tokenService: TokenService
 ) {
 
     companion object {
-        val log: Logger = LoggerFactory.getLogger(TokenRefreshController::class.java)
+        val log: Logger = LoggerFactory.getLogger(TokenController::class.java)
     }
 
     @GetMapping(value = ["/refresh"])
