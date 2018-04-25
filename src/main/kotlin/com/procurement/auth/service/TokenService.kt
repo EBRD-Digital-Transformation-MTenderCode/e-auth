@@ -67,7 +67,7 @@ constructor(
         }
 
     private fun DecodedJWT.isNotRefreshToken(): Boolean =
-        this.getHeaderClaim(HEADER_NAME_TOKEN_TYPE).asString() != REFRESH_TOKEN_TYPE
+        this.getHeaderClaim(HEADER_NAME_TOKEN_TYPE).asString() != TokenType.REFRESH.toString()
 
     private fun DecodedJWT.getPlatformId(): UUID =
         UUID.fromString(this.getClaim(CLAIM_NAME_PLATFORM_ID).asString())

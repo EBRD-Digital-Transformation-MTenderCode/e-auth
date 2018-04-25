@@ -2,10 +2,9 @@ package com.procurement.auth.helper
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
-import com.procurement.auth.model.ACCESS_TOKEN_TYPE
 import com.procurement.auth.model.CLAIM_NAME_PLATFORM_ID
 import com.procurement.auth.model.HEADER_NAME_TOKEN_TYPE
-import com.procurement.auth.model.REFRESH_TOKEN_TYPE
+import com.procurement.auth.model.TokenType
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -14,7 +13,7 @@ import java.util.*
 fun genAccessToken(platformId: UUID, expiresOn: Date, algorithm: Algorithm): String =
     genToken(
         claims = mapOf<String, Any>(CLAIM_NAME_PLATFORM_ID to platformId),
-        header = mapOf<String, Any>(HEADER_NAME_TOKEN_TYPE to ACCESS_TOKEN_TYPE),
+        header = mapOf<String, Any>(HEADER_NAME_TOKEN_TYPE to TokenType.ACCESS),
         expiresOn = expiresOn,
         algorithm = algorithm
     )
@@ -22,7 +21,7 @@ fun genAccessToken(platformId: UUID, expiresOn: Date, algorithm: Algorithm): Str
 fun genRefreshToken(platformId: UUID, expiresOn: Date, algorithm: Algorithm): String =
     genToken(
         claims = mapOf<String, Any>(CLAIM_NAME_PLATFORM_ID to platformId),
-        header = mapOf<String, Any>(HEADER_NAME_TOKEN_TYPE to REFRESH_TOKEN_TYPE),
+        header = mapOf<String, Any>(HEADER_NAME_TOKEN_TYPE to TokenType.REFRESH),
         expiresOn = expiresOn,
         algorithm = algorithm
     )

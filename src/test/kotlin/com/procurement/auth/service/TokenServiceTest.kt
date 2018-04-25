@@ -88,11 +88,11 @@ class TokenServiceTest {
 
         val jwtAccess = verifier.verify(tokens.accessToken)
         assertEquals(PLATFORM_ID.toString(), jwtAccess.getClaim(CLAIM_NAME_PLATFORM_ID).asString())
-        assertEquals(ACCESS_TOKEN_TYPE, jwtAccess.getHeaderClaim(HEADER_NAME_TOKEN_TYPE).asString())
+        assertEquals(TokenType.ACCESS.toString(), jwtAccess.getHeaderClaim(HEADER_NAME_TOKEN_TYPE).asString())
 
         val jwtRefresh = verifier.verify(tokens.refreshToken)
         assertEquals(PLATFORM_ID.toString(), jwtRefresh.getClaim(CLAIM_NAME_PLATFORM_ID).asString())
-        assertEquals(REFRESH_TOKEN_TYPE, jwtRefresh.getHeaderClaim(HEADER_NAME_TOKEN_TYPE).asString())
+        assertEquals(TokenType.REFRESH.toString(), jwtRefresh.getHeaderClaim(HEADER_NAME_TOKEN_TYPE).asString())
     }
 
     @Test
