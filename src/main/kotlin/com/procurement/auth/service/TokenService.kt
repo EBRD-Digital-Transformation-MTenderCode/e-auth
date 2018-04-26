@@ -22,6 +22,8 @@ interface TokenService {
     fun getTokensByUserCredentials(userCredentials: UserCredentials): AuthTokens
 
     fun getTokensByRefreshToken(token: String): AuthTokens
+
+    fun verification(token: String)
 }
 
 class TokenServiceImpl
@@ -48,9 +50,15 @@ constructor(
 
     override fun getTokensByRefreshToken(token: String): AuthTokens {
         val jwt = token.toJWT()
+        jwt.checkTypeToken(TokenType.REFRESH)
         val platformId = jwt.getPlatformId()
         val account = accountService.findByPlatformId(platformId)
         return genTokens(account)
+    }
+
+    override fun verification(token: String) {
+        val jwt = token.toJWT()
+        jwt.checkTypeToken(TokenType.ACCESS)
     }
 
     private fun String.toJWT() =
@@ -60,14 +68,14 @@ constructor(
             throw TokenExpiredException("The refresh token is expired.")
         } catch (ex: Exception) {
             throw VerificationTokenException("Error of verification the token.", ex)
-        }.also {
-            if (it.isNotRefreshToken()) {
-                throw WrongTypeRefreshTokenException("Invalid the token type.")
-            }
         }
 
-    private fun DecodedJWT.isNotRefreshToken(): Boolean =
-        this.getHeaderClaim(HEADER_NAME_TOKEN_TYPE).asString() != TokenType.REFRESH.toString()
+    private fun DecodedJWT.checkTypeToken(tokenType: TokenType) {
+        val valueTokenTypeHeader = this.getHeaderClaim(HEADER_NAME_TOKEN_TYPE).asString()
+        if(tokenType.toString() != valueTokenTypeHeader) {
+            throw WrongTypeRefreshTokenException("Invalid the token type. Expected type of token is '$tokenType'.")
+        }
+    }
 
     private fun DecodedJWT.getPlatformId(): UUID =
         UUID.fromString(this.getClaim(CLAIM_NAME_PLATFORM_ID).asString())

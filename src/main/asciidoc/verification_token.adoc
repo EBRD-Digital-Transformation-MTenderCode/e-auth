@@ -1,0 +1,91 @@
+= *Verification token*
+== Request
+include::../../../target/generated-snippets/verification/success/http-request.adoc[]
+
+== Request headers
+include::../../../target/generated-snippets/verification/success/request-headers.adoc[]
+
+== Response structure
+include::../../../target/generated-snippets/verification/success/http-response.adoc[]
+== Response fields
+include::../../../target/generated-snippets/verification/success/response-fields.adoc[]
+
+== Errors
+
+=== No such the authentication header
+
+====
+*Request*
+include::../../../target/generated-snippets/verification/errors/no_such_auth_header/http-request.adoc[]
+*Response*
+include::../../../target/generated-snippets/verification/errors/no_such_auth_header/http-response.adoc[]
+*Response headers*
+include::../../../target/generated-snippets/verification/errors/no_such_auth_header/response-headers.adoc[]
+*Response fields*
+include::../../../target/generated-snippets/verification/errors/no_such_auth_header/response-fields.adoc[]
+====
+
+=== Invalid type the authentication header
+
+====
+*Request*
+include::../../../target/generated-snippets/verification/errors/invalid_type_auth_header/http-request.adoc[]
+*Response*
+include::../../../target/generated-snippets/verification/errors/invalid_type_auth_header/http-response.adoc[]
+*Response headers*
+include::../../../target/generated-snippets/verification/errors/invalid_type_auth_header/response-headers.adoc[]
+*Response fields*
+include::../../../target/generated-snippets/verification/errors/invalid_type_auth_header/response-fields.adoc[]
+====
+
+=== The authentication token is empty
+
+====
+*Request*
+include::../../../target/generated-snippets/verification/errors/auth_token_is_empty/http-request.adoc[]
+*Response*
+include::../../../target/generated-snippets/verification/errors/auth_token_is_empty/http-response.adoc[]
+*Response headers*
+include::../../../target/generated-snippets/verification/errors/auth_token_is_empty/response-headers.adoc[]
+*Response fields*
+include::../../../target/generated-snippets/verification/errors/auth_token_is_empty/response-fields.adoc[]
+====
+
+=== Invalid type of the access token
+
+====
+*Request*
+include::../../../target/generated-snippets/verification/errors/invalid_type_token/http-request.adoc[]
+*Response*
+include::../../../target/generated-snippets/verification/errors/invalid_type_token/http-response.adoc[]
+*Response headers*
+include::../../../target/generated-snippets/verification/errors/invalid_type_token/response-headers.adoc[]
+*Response fields*
+include::../../../target/generated-snippets/verification/errors/invalid_type_token/response-fields.adoc[]
+====
+
+=== The error of verification of the access token
+
+====
+*Request*
+include::../../../target/generated-snippets/verification/errors/invalid_signature/http-request.adoc[]
+*Response*
+include::../../../target/generated-snippets/verification/errors/invalid_signature/http-response.adoc[]
+*Response headers*
+include::../../../target/generated-snippets/verification/errors/invalid_signature/response-headers.adoc[]
+*Response fields*
+include::../../../target/generated-snippets/verification/errors/invalid_signature/response-fields.adoc[]
+====
+
+=== The access-token has expired
+
+====
+*Request*
+include::../../../target/generated-snippets/verification/errors/auth_token_is_expired/http-request.adoc[]
+*Response*
+include::../../../target/generated-snippets/verification/errors/auth_token_is_expired/http-response.adoc[]
+*Response headers*
+include::../../../target/generated-snippets/verification/errors/auth_token_is_expired/response-headers.adoc[]
+*Response fields*
+include::../../../target/generated-snippets/verification/errors/auth_token_is_expired/response-fields.adoc[]
+====

@@ -46,6 +46,18 @@ class TokenController(
             )
     }
 
+    @GetMapping("/verification")
+    fun verification(
+        @RequestHeader(
+            value = AUTHORIZATION_HEADER_NAME,
+            required = false,
+            defaultValue = "") authorizationHeader: String): ResponseEntity<VerificationSuccessRS> {
+
+        val token = getBearerTokenByAuthHeader(authorizationHeader)
+        tokenService.verification(token)
+        return ResponseEntity.ok(VerificationSuccessRS())
+    }
+
     @ExceptionHandler(value = [NoSuchAuthHeaderException::class])
     fun noSuchAuthHeader(e: NoSuchAuthHeaderException): ResponseEntity<BaseRS> {
         log.warn(e.message)
@@ -115,7 +127,7 @@ class TokenController(
     }
 
     @ExceptionHandler(value = [WrongTypeRefreshTokenException::class])
-    fun wrongTypeRefreshToken(e: WrongTypeRefreshTokenException): ResponseEntity<BaseRS> {
+    fun wrongTypeToken(e: WrongTypeRefreshTokenException): ResponseEntity<BaseRS> {
         log.warn(e.message)
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED.value())
             .header(
@@ -155,7 +167,7 @@ class TokenController(
     }
 
     @ExceptionHandler(value = [TokenExpiredException::class])
-    fun refreshTokenExpired(e: TokenExpiredException): ResponseEntity<BaseRS> {
+    fun tokenExpired(e: TokenExpiredException): ResponseEntity<BaseRS> {
         log.warn(e.message)
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED.value())
             .header(

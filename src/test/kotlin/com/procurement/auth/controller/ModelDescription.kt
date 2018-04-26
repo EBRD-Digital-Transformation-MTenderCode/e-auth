@@ -39,6 +39,14 @@ object ModelDescription {
         }
     }
 
+    object Verification {
+        fun responseSuccessful(): List<FieldDescriptor> {
+            return listOf(
+                getFieldDescriptor("success", SUCCESS_DESCRIPTION)
+            )
+        }
+    }
+
     fun responseError(): List<FieldDescriptor> {
         return listOf(
             getFieldDescriptor("success", SUCCESS_DESCRIPTION),

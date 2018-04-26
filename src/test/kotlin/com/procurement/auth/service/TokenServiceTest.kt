@@ -21,6 +21,7 @@ import com.procurement.auth.security.RSAServiceImpl
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import java.time.LocalDateTime
@@ -67,164 +68,225 @@ class TokenServiceTest {
         )
     }
 
-    @Test
-    @DisplayName("getTokensByUserCredentials - OK")
-    fun getTokensByUserCredentials() {
-        val userCredentials = UserCredentials(USER_NAME, USER_PASSWORD)
-        val account = Account(
-            id = USER_ID,
-            username = USER_NAME,
-            hashPassword = crypt.encode(USER_PASSWORD),
-            enabled = true,
-            platformId = PLATFORM_ID
-        )
-        whenever(accountService.findByUserCredentials(eq(userCredentials)))
-            .thenReturn(account)
+    @Nested
+    inner class GetTokensByUserCredentials {
+        @Test
+        @DisplayName("OK")
+        fun getTokensByUserCredentials() {
+            val userCredentials = UserCredentials(USER_NAME, USER_PASSWORD)
+            val account = Account(
+                id = USER_ID,
+                username = USER_NAME,
+                hashPassword = crypt.encode(USER_PASSWORD),
+                enabled = true,
+                platformId = PLATFORM_ID
+            )
+            whenever(accountService.findByUserCredentials(eq(userCredentials)))
+                .thenReturn(account)
 
-        val tokens = service.getTokensByUserCredentials(userCredentials)
-        assertNotNull(tokens)
+            val tokens = service.getTokensByUserCredentials(userCredentials)
+            assertNotNull(tokens)
 
-        val verifier = getVerifier()
+            val verifier = getVerifier()
 
-        val jwtAccess = verifier.verify(tokens.accessToken)
-        assertEquals(PLATFORM_ID.toString(), jwtAccess.getClaim(CLAIM_NAME_PLATFORM_ID).asString())
-        assertEquals(TokenType.ACCESS.toString(), jwtAccess.getHeaderClaim(HEADER_NAME_TOKEN_TYPE).asString())
+            val jwtAccess = verifier.verify(tokens.accessToken)
+            assertEquals(PLATFORM_ID.toString(), jwtAccess.getClaim(CLAIM_NAME_PLATFORM_ID).asString())
+            assertEquals(TokenType.ACCESS.toString(), jwtAccess.getHeaderClaim(HEADER_NAME_TOKEN_TYPE).asString())
 
-        val jwtRefresh = verifier.verify(tokens.refreshToken)
-        assertEquals(PLATFORM_ID.toString(), jwtRefresh.getClaim(CLAIM_NAME_PLATFORM_ID).asString())
-        assertEquals(TokenType.REFRESH.toString(), jwtRefresh.getHeaderClaim(HEADER_NAME_TOKEN_TYPE).asString())
+            val jwtRefresh = verifier.verify(tokens.refreshToken)
+            assertEquals(PLATFORM_ID.toString(), jwtRefresh.getClaim(CLAIM_NAME_PLATFORM_ID).asString())
+            assertEquals(TokenType.REFRESH.toString(), jwtRefresh.getHeaderClaim(HEADER_NAME_TOKEN_TYPE).asString())
+        }
+
+        @Test
+        @DisplayName("AccountRevokedException")
+        fun getTokensByUserCredentials5() {
+            doThrow(
+                AccountRevokedException(message = ""))
+                .whenever(accountService)
+                .findByUserCredentials(any())
+
+            assertEquals(
+                "",
+                assertThrows(
+                    AccountRevokedException::class.java,
+                    {
+                        val userCredentials = UserCredentials(USER_NAME, USER_PASSWORD)
+                        service.getTokensByUserCredentials(userCredentials)
+                    }
+                ).message
+            )
+        }
     }
 
-    @Test
-    @DisplayName("getTokensByUserCredentials - AccountRevokedException")
-    fun getTokensByUserCredentials5() {
-        doThrow(
-            AccountRevokedException(message = ""))
-            .whenever(accountService)
-            .findByUserCredentials(any())
+    @Nested
+    inner class GetTokensByRefreshToken {
+        @Test
+        @DisplayName(" OK")
+        fun getTokensByRefreshToken() {
+            val account = Account(
+                id = USER_ID,
+                username = USER_NAME,
+                hashPassword = crypt.encode(USER_PASSWORD),
+                enabled = true,
+                platformId = PLATFORM_ID
+            )
+            whenever(accountService.findByPlatformId(any()))
+                .thenReturn(account)
 
-        assertEquals(
-            "",
-            assertThrows(
-                AccountRevokedException::class.java,
-                {
-                    val userCredentials = UserCredentials(USER_NAME, USER_PASSWORD)
-                    service.getTokensByUserCredentials(userCredentials)
-                }
-            ).message
-        )
+            val refreshToken = genRefreshToken(LocalDateTime.now())
+            val tokens = service.getTokensByRefreshToken(refreshToken)
+            assertNotNull(tokens)
+
+            val verifier = getVerifier()
+
+            val jwtAccess = verifier.verify(tokens.accessToken)
+            assertEquals(PLATFORM_ID.toString(), jwtAccess.getClaim(CLAIM_NAME_PLATFORM_ID).asString())
+            assertEquals(TokenType.ACCESS.toString(), jwtAccess.getHeaderClaim(HEADER_NAME_TOKEN_TYPE).asString())
+
+            val jwtRefresh = verifier.verify(tokens.refreshToken)
+            assertEquals(PLATFORM_ID.toString(), jwtRefresh.getClaim(CLAIM_NAME_PLATFORM_ID).asString())
+            assertEquals(TokenType.REFRESH.toString(), jwtRefresh.getHeaderClaim(HEADER_NAME_TOKEN_TYPE).asString())
+        }
+
+        @Test
+        @DisplayName("TokenExpiredException")
+        fun tokenExpired() {
+            assertEquals(
+                "The refresh token is expired.",
+                assertThrows(
+                    TokenExpiredException::class.java,
+                    {
+                        val refreshToken = genRefreshToken(LocalDateTime.now().minusDays(1))
+                        service.getTokensByRefreshToken(refreshToken)
+                    }
+                ).message
+            )
+        }
+
+        @Test
+        @DisplayName("WrongTypeRefreshTokenException")
+        fun bearerTokenWrongType() {
+            assertEquals(
+                "Invalid the token type. Expected type of token is 'REFRESH'.",
+                assertThrows(
+                    WrongTypeRefreshTokenException::class.java,
+                    {
+                        val refreshToken = genAccessToken(LocalDateTime.now())
+                        service.getTokensByRefreshToken(refreshToken)
+                    }
+                ).message
+            )
+        }
+
+        @Test
+        @DisplayName("VerificationTokenException")
+        fun verificationToken() {
+            assertEquals(
+                "Error of verification the token.",
+                assertThrows(
+                    VerificationTokenException::class.java,
+                    {
+                        val refreshToken = genRefreshToken(LocalDateTime.now()).substring(1)
+                        service.getTokensByRefreshToken(refreshToken)
+                    }
+                ).message
+            )
+        }
+
+        @Test
+        @DisplayName("AccountRevokedException")
+        fun accountRevoked() {
+            doThrow(
+                AccountRevokedException(message = ""))
+                .whenever(accountService)
+                .findByPlatformId(eq(PLATFORM_ID))
+
+            assertEquals(
+                "",
+                assertThrows(
+                    AccountRevokedException::class.java,
+                    {
+                        val refreshToken = genRefreshToken(LocalDateTime.now())
+                        service.getTokensByRefreshToken(refreshToken)
+                    }
+                ).message
+            )
+        }
+
+        @Test
+        @DisplayName("PlatformUnknownException")
+        fun platformNotFound() {
+            doThrow(PlatformUnknownException(message = ""))
+                .whenever(accountService)
+                .findByPlatformId(eq(PLATFORM_ID))
+
+            assertEquals(
+                "",
+                assertThrows(
+                    PlatformUnknownException::class.java,
+                    {
+                        val refreshToken = genRefreshToken(LocalDateTime.now())
+                        service.getTokensByRefreshToken(refreshToken)
+                    }
+                ).message
+            )
+        }
     }
 
-    @Test
-    @DisplayName("getTokensByRefreshToken - OK")
-    fun getTokensByRefreshToken() {
-        val account = Account(
-            id = USER_ID,
-            username = USER_NAME,
-            hashPassword = crypt.encode(USER_PASSWORD),
-            enabled = true,
-            platformId = PLATFORM_ID
-        )
-        whenever(accountService.findByPlatformId(any()))
-            .thenReturn(account)
+    @Nested
+    inner class Verification {
+        @Test
+        @DisplayName(" OK")
+        fun verification() {
+            val accessToken = genAccessToken(LocalDateTime.now())
+            service.verification(accessToken)
+        }
 
-        val refreshToken = genRefreshToken(LocalDateTime.now())
-        val tokens = service.getTokensByRefreshToken(refreshToken)
-        assertNotNull(tokens)
+        @Test
+        @DisplayName("TokenExpiredException")
+        fun tokenExpired() {
+            assertEquals(
+                "The refresh token is expired.",
+                assertThrows(
+                    TokenExpiredException::class.java,
+                    {
+                        val accessToken = genAccessToken(LocalDateTime.now().minusDays(1))
+                        service.verification(accessToken)
+                    }
+                ).message
+            )
+        }
 
-        val verifier = getVerifier()
+        @Test
+        @DisplayName("WrongTypeRefreshTokenException")
+        fun bearerTokenWrongType() {
+            assertEquals(
+                "Invalid the token type. Expected type of token is 'ACCESS'.",
+                assertThrows(
+                    WrongTypeRefreshTokenException::class.java,
+                    {
+                        val accessToken = genRefreshToken(LocalDateTime.now())
+                        service.verification(accessToken)
+                    }
+                ).message
+            )
+        }
 
-        val jwtAccess = verifier.verify(tokens.accessToken)
-        assertEquals(PLATFORM_ID.toString(), jwtAccess.getClaim(CLAIM_NAME_PLATFORM_ID).asString())
-        assertEquals("ACCESS", jwtAccess.getHeaderClaim(HEADER_NAME_TOKEN_TYPE).asString())
-
-        val jwtRefresh = verifier.verify(tokens.refreshToken)
-        assertEquals(PLATFORM_ID.toString(), jwtRefresh.getClaim(CLAIM_NAME_PLATFORM_ID).asString())
-        assertEquals("REFRESH", jwtRefresh.getHeaderClaim(HEADER_NAME_TOKEN_TYPE).asString())
-    }
-
-    @Test
-    @DisplayName("getTokensByRefreshToken - TokenExpiredException")
-    fun tokenExpired() {
-        assertEquals(
-            "The refresh token is expired.",
-            assertThrows(
-                TokenExpiredException::class.java,
-                {
-                    val refreshToken = genRefreshToken(LocalDateTime.now().minusDays(1))
-                    service.getTokensByRefreshToken(refreshToken)
-                }
-            ).message
-        )
-    }
-
-    @Test
-    @DisplayName("getTokensByRefreshToken - WrongTypeRefreshTokenException")
-    fun bearerTokenWrongType() {
-        assertEquals(
-            "Invalid the token type.",
-            assertThrows(
-                WrongTypeRefreshTokenException::class.java,
-                {
-                    val refreshToken = genAccessToken(LocalDateTime.now())
-                    service.getTokensByRefreshToken(refreshToken)
-                }
-            ).message
-        )
-    }
-
-    @Test
-    @DisplayName("getTokensByRefreshToken - VerificationTokenException")
-    fun bearerTokenWrongType2() {
-        assertEquals(
-            "Error of verification the token.",
-            assertThrows(
-                VerificationTokenException::class.java,
-                {
-                    val refreshToken = genAccessToken(LocalDateTime.now()).substring(1)
-                    service.getTokensByRefreshToken(refreshToken)
-                }
-            ).message
-        )
-    }
-
-    @Test
-    @DisplayName("getTokensByRefreshToken - AccountRevokedException")
-    fun accountRevoked() {
-        doThrow(
-            AccountRevokedException(message = ""))
-            .whenever(accountService)
-            .findByPlatformId(eq(PLATFORM_ID))
-
-        assertEquals(
-            "",
-            assertThrows(
-                AccountRevokedException::class.java,
-                {
-                    val refreshToken = genRefreshToken(LocalDateTime.now())
-                    service.getTokensByRefreshToken(refreshToken)
-                }
-            ).message
-        )
-    }
-
-    @Test
-    @DisplayName("getTokensByRefreshToken - PlatformUnknownException")
-    fun platformNotFound() {
-        doThrow(PlatformUnknownException(message = ""))
-            .whenever(accountService)
-            .findByPlatformId(eq(PLATFORM_ID))
-
-        assertEquals(
-            "",
-            assertThrows(
-                PlatformUnknownException::class.java,
-                {
-                    val refreshToken = genRefreshToken(LocalDateTime.now())
-                    service.getTokensByRefreshToken(refreshToken)
-                }
-            ).message
-        )
+        @Test
+        @DisplayName("VerificationTokenException")
+        fun verificationToken() {
+            assertEquals(
+                "Error of verification the token.",
+                assertThrows(
+                    VerificationTokenException::class.java,
+                    {
+                        val refreshToken = genAccessToken(LocalDateTime.now()).substring(1)
+                        service.verification(refreshToken)
+                    }
+                ).message
+            )
+        }
     }
 
     private fun genRSAKey() = RSAKeyGenerator().generate(2048)

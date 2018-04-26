@@ -5,3 +5,5 @@ v17.12.1
 include::signin.adoc[]
 
 include::refresh_tokens.adoc[]
+
+include::verification_token.adoc[]
