@@ -73,7 +73,7 @@ class TokenVerificationControllerTest {
         whenever(tokenService.getTokensByRefreshToken(any()))
             .thenReturn(authTokens)
 
-        val authHeaderValue = AUTHORIZATION_PREFIX_BEARER + REFRESH_TOKEN
+        val authHeaderValue = "$AUTHORIZATION_PREFIX_BEARER $REFRESH_TOKEN"
         mockMvc.perform(
             get(URL)
                 .header(AUTHORIZATION_HEADER_NAME, authHeaderValue))
@@ -193,7 +193,7 @@ class TokenVerificationControllerTest {
             .whenever(tokenService)
             .getTokensByRefreshToken(any())
 
-        val authHeaderValue = AUTHORIZATION_PREFIX_BEARER + REFRESH_TOKEN
+        val authHeaderValue = "$AUTHORIZATION_PREFIX_BEARER $REFRESH_TOKEN"
         val wwwAuthHeaderValue = BEARER_REALM
         mockMvc.perform(
             get(URL)
@@ -231,7 +231,7 @@ class TokenVerificationControllerTest {
             .whenever(tokenService)
             .getTokensByRefreshToken(any())
 
-        val authHeaderValue = AUTHORIZATION_PREFIX_BEARER + REFRESH_TOKEN
+        val authHeaderValue = "$AUTHORIZATION_PREFIX_BEARER $REFRESH_TOKEN"
         val wwwAuthHeaderValue = """$BEARER_REALM, $ERROR_CODE_INVALID_TOKEN, error_message="The token is expired.""""
         mockMvc.perform(
             get(URL)
@@ -264,7 +264,7 @@ class TokenVerificationControllerTest {
             .whenever(tokenService)
             .getTokensByRefreshToken(any())
 
-        val authHeaderValue = AUTHORIZATION_PREFIX_BEARER + REFRESH_TOKEN
+        val authHeaderValue = "$AUTHORIZATION_PREFIX_BEARER $REFRESH_TOKEN"
         val wwwAuthHeaderValue = """$BEARER_REALM, $ERROR_CODE_INVALID_TOKEN, error_message="The platform is unknown.""""
         mockMvc.perform(
             get(URL)
@@ -297,7 +297,7 @@ class TokenVerificationControllerTest {
             .whenever(tokenService)
             .getTokensByRefreshToken(any())
 
-        val authHeaderValue = AUTHORIZATION_PREFIX_BEARER + ACCESS_TOKEN
+        val authHeaderValue = "$AUTHORIZATION_PREFIX_BEARER $ACCESS_TOKEN"
         val wwwAuthHeaderValue = """$BEARER_REALM, $ERROR_CODE_INVALID_TOKEN, error_message="Invalid the token type.""""
         mockMvc.perform(
             get(URL)
@@ -330,7 +330,7 @@ class TokenVerificationControllerTest {
             .whenever(tokenService)
             .getTokensByRefreshToken(any())
 
-        val authHeaderValue = AUTHORIZATION_PREFIX_BEARER + REFRESH_TOKEN
+        val authHeaderValue = "$AUTHORIZATION_PREFIX_BEARER $REFRESH_TOKEN"
         val wwwAuthHeaderValue = """$BEARER_REALM, $ERROR_CODE_INVALID_TOKEN, error_message="The account is revoked.""""
         mockMvc.perform(
             get(URL)

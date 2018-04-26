@@ -68,7 +68,7 @@ class SignInControllerTest {
         whenever(tokenService.getTokensByUserCredentials(any()))
             .thenReturn(authTokens)
 
-        val authHeaderValue = AUTHORIZATION_PREFIX_BASIC + Base64.encodeBase64String(BASIC_CREDENTIALS.toByteArray())
+        val authHeaderValue = AUTHORIZATION_PREFIX_BASIC + " " + Base64.encodeBase64String(BASIC_CREDENTIALS.toByteArray())
         mockMvc.perform(
             get(URL)
                 .header(AUTHORIZATION_HEADER_NAME, authHeaderValue))
@@ -126,7 +126,7 @@ class SignInControllerTest {
     @Test
     @DisplayName("Invalid type the authentication header")
     fun invalidAuthHeaderType() {
-        val authHeaderValue = AUTHORIZATION_PREFIX_BEARER + Base64.encodeBase64String(BASIC_CREDENTIALS.toByteArray())
+        val authHeaderValue = AUTHORIZATION_PREFIX_BEARER + " " + Base64.encodeBase64String(BASIC_CREDENTIALS.toByteArray())
         val wwwAuthHeaderValue = BASIC_REALM
         mockMvc.perform(
             get(URL)
@@ -195,7 +195,7 @@ class SignInControllerTest {
     @DisplayName("Invalid format the authentication token")
     fun invalidFormatAuthToken() {
         val authHeaderValue =
-            AUTHORIZATION_PREFIX_BASIC + Base64.encodeBase64String(INVALID_FORMAT_BASIC_CREDENTIALS.toByteArray())
+            AUTHORIZATION_PREFIX_BASIC + " " + Base64.encodeBase64String(INVALID_FORMAT_BASIC_CREDENTIALS.toByteArray())
         val wwwAuthHeaderValue = BASIC_REALM
         mockMvc.perform(
             get(URL)
@@ -234,7 +234,7 @@ class SignInControllerTest {
             .getTokensByUserCredentials(any())
 
         val authHeaderValue =
-            AUTHORIZATION_PREFIX_BASIC + Base64.encodeBase64String(INVALID_BASIC_CREDENTIALS.toByteArray())
+            AUTHORIZATION_PREFIX_BASIC + " " + Base64.encodeBase64String(INVALID_BASIC_CREDENTIALS.toByteArray())
         val wwwAuthHeaderValue = BASIC_REALM
         mockMvc.perform(
             get(URL)
@@ -268,7 +268,7 @@ class SignInControllerTest {
             .getTokensByUserCredentials(any())
 
         val authHeaderValue =
-            AUTHORIZATION_PREFIX_BASIC + Base64.encodeBase64String(BASIC_CREDENTIALS.toByteArray())
+            AUTHORIZATION_PREFIX_BASIC + " " + Base64.encodeBase64String(BASIC_CREDENTIALS.toByteArray())
         val wwwAuthHeaderValue = """$BASIC_REALM, error_message="The account is revoked.""""
         mockMvc.perform(
             get(URL)

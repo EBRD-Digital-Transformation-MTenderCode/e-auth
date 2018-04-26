@@ -88,7 +88,7 @@ class TokenControllerTest {
             whenever(tokenService.getTokensByRefreshToken(REFRESH_TOKEN))
                 .thenReturn(authTokens)
 
-            val authHeaderValue = AUTHORIZATION_PREFIX_BEARER + REFRESH_TOKEN
+            val authHeaderValue = "$AUTHORIZATION_PREFIX_BEARER $REFRESH_TOKEN"
             mockMvc.perform(
                 get(URL)
                     .header(AUTHORIZATION_HEADER_NAME, authHeaderValue))
@@ -142,7 +142,7 @@ class TokenControllerTest {
         @DisplayName("Invalid type of the authentication header")
         fun invalidAuthHeaderType() {
             val authHeaderValue =
-                AUTHORIZATION_PREFIX_BASIC + Base64.encodeBase64String(StringUtils.getBytesUtf8(REFRESH_TOKEN))
+                AUTHORIZATION_PREFIX_BASIC + " " + Base64.encodeBase64String(StringUtils.getBytesUtf8(REFRESH_TOKEN))
             val wwwAuthHeaderValue = BEARER_REALM
             mockMvc.perform(
                 get(URL)
@@ -209,7 +209,7 @@ class TokenControllerTest {
                 .whenever(tokenService)
                 .getTokensByRefreshToken(REFRESH_TOKEN)
 
-            val authHeaderValue = AUTHORIZATION_PREFIX_BEARER + REFRESH_TOKEN
+            val authHeaderValue = "$AUTHORIZATION_PREFIX_BEARER $REFRESH_TOKEN"
             val wwwAuthHeaderValue = BEARER_REALM
             mockMvc.perform(
                 get(URL)
@@ -247,7 +247,7 @@ class TokenControllerTest {
                 .whenever(tokenService)
                 .getTokensByRefreshToken(REFRESH_TOKEN)
 
-            val authHeaderValue = AUTHORIZATION_PREFIX_BEARER + REFRESH_TOKEN
+            val authHeaderValue = "$AUTHORIZATION_PREFIX_BEARER $REFRESH_TOKEN"
             val wwwAuthHeaderValue =
                 """$BEARER_REALM, $ERROR_CODE_INVALID_TOKEN, error_message="The token is expired.""""
             mockMvc.perform(
@@ -281,7 +281,7 @@ class TokenControllerTest {
                 .whenever(tokenService)
                 .getTokensByRefreshToken(REFRESH_TOKEN)
 
-            val authHeaderValue = AUTHORIZATION_PREFIX_BEARER + REFRESH_TOKEN
+            val authHeaderValue = "$AUTHORIZATION_PREFIX_BEARER $REFRESH_TOKEN"
             val wwwAuthHeaderValue =
                 """$BEARER_REALM, $ERROR_CODE_INVALID_TOKEN, error_message="The platform is unknown.""""
             mockMvc.perform(
@@ -315,7 +315,7 @@ class TokenControllerTest {
                 .whenever(tokenService)
                 .getTokensByRefreshToken(ACCESS_TOKEN)
 
-            val authHeaderValue = AUTHORIZATION_PREFIX_BEARER + ACCESS_TOKEN
+            val authHeaderValue = "$AUTHORIZATION_PREFIX_BEARER $ACCESS_TOKEN"
             val wwwAuthHeaderValue =
                 """$BEARER_REALM, $ERROR_CODE_INVALID_TOKEN, error_message="Invalid the token type.""""
             mockMvc.perform(
@@ -349,7 +349,7 @@ class TokenControllerTest {
                 .whenever(tokenService)
                 .getTokensByRefreshToken(REFRESH_TOKEN)
 
-            val authHeaderValue = AUTHORIZATION_PREFIX_BEARER + REFRESH_TOKEN
+            val authHeaderValue = "$AUTHORIZATION_PREFIX_BEARER $REFRESH_TOKEN"
             val wwwAuthHeaderValue =
                 """$BEARER_REALM, $ERROR_CODE_INVALID_TOKEN, error_message="The account is revoked.""""
             mockMvc.perform(
@@ -388,7 +388,7 @@ class TokenControllerTest {
                 .whenever(tokenService)
                 .verification(ACCESS_TOKEN)
 
-            val authHeaderValue = AUTHORIZATION_PREFIX_BEARER + ACCESS_TOKEN
+            val authHeaderValue = "$AUTHORIZATION_PREFIX_BEARER $ACCESS_TOKEN"
             mockMvc.perform(
                 get(URL)
                     .header(AUTHORIZATION_HEADER_NAME, authHeaderValue))
@@ -440,7 +440,7 @@ class TokenControllerTest {
         @DisplayName("Invalid type of the authentication header")
         fun invalidAuthHeaderType() {
             val authHeaderValue =
-                AUTHORIZATION_PREFIX_BASIC + Base64.encodeBase64String(StringUtils.getBytesUtf8(ACCESS_TOKEN))
+                AUTHORIZATION_PREFIX_BASIC + " " + Base64.encodeBase64String(StringUtils.getBytesUtf8(ACCESS_TOKEN))
             val wwwAuthHeaderValue = BEARER_REALM
             mockMvc.perform(
                 get(URL)
@@ -507,7 +507,7 @@ class TokenControllerTest {
                 .whenever(tokenService)
                 .verification(ACCESS_TOKEN)
 
-            val authHeaderValue = AUTHORIZATION_PREFIX_BEARER + ACCESS_TOKEN
+            val authHeaderValue = "$AUTHORIZATION_PREFIX_BEARER $ACCESS_TOKEN"
             val wwwAuthHeaderValue = BEARER_REALM
             mockMvc.perform(
                 get(URL)
@@ -545,7 +545,7 @@ class TokenControllerTest {
                 .whenever(tokenService)
                 .verification(ACCESS_TOKEN)
 
-            val authHeaderValue = AUTHORIZATION_PREFIX_BEARER + ACCESS_TOKEN
+            val authHeaderValue = "$AUTHORIZATION_PREFIX_BEARER $ACCESS_TOKEN"
             val wwwAuthHeaderValue =
                 """$BEARER_REALM, $ERROR_CODE_INVALID_TOKEN, error_message="The token is expired.""""
             mockMvc.perform(
@@ -579,7 +579,7 @@ class TokenControllerTest {
                 .whenever(tokenService)
                 .verification(REFRESH_TOKEN)
 
-            val authHeaderValue = AUTHORIZATION_PREFIX_BEARER + REFRESH_TOKEN
+            val authHeaderValue = "$AUTHORIZATION_PREFIX_BEARER $REFRESH_TOKEN"
             val wwwAuthHeaderValue =
                 """$BEARER_REALM, $ERROR_CODE_INVALID_TOKEN, error_message="Invalid the token type.""""
             mockMvc.perform(
