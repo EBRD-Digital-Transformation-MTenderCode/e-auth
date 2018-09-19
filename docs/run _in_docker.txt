@@ -10,7 +10,7 @@ docker network create \
 
 
 #****************************************#
-# Run E-AUTH                             #
+# Run AUTH                               #
 # Need assign uri, username and password #
 #****************************************#
 
@@ -21,4 +21,4 @@ docker run -d --name=auth-1 \
   --publish 9011:8080 \
   --network ocds-network \
   --dns 10.0.10.115 \
-  docker-registry.eprocurement.systems/e-auth:17.12.1
+  dev.docker-registry.eprocurement.systems/auth:17.12.1

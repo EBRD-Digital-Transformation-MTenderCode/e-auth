@@ -3,9 +3,9 @@ server:
 
 spring:
   application:
-    name: e-auth
+    name: auth
 
   cloud:
     config:
       failFast: true
-      name: e-auth
+      name: auth
