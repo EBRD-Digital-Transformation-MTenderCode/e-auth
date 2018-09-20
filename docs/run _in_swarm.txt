@@ -20,6 +20,6 @@ docker service create --name="auth" \
   --env __PROP_spring_cloud_config_label= \
   --publish published=9011,target=8080 \
   --network ocds-network \
-  --dns 10.0.10.115 \
+  --dns 10.0.20.115 \
   --with-registry-auth \
   dev.docker-registry.eprocurement.systems/auth:17.12.1

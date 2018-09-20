@@ -20,5 +20,5 @@ docker run -d --name=auth-1 \
   --env __PROP_spring_cloud_config_label= \
   --publish 9011:8080 \
   --network ocds-network \
-  --dns 10.0.10.115 \
+  --dns 10.0.20.115 \
   dev.docker-registry.eprocurement.systems/auth:17.12.1
