@@ -21,13 +21,6 @@ spring:
         prepStmtCacheSize: 250
         prepStmtCacheSqlLimit: 2048
 
-eureka:
-  client:
-    fetchRegistry: false
-    registerWithEureka: true
-    serviceUrl:
-      defaultZone: http://eureka-peer-1:8801/eureka/,http://eureka-peer-2:8802/eureka/
-
 jwt:
   life-time:
     access: 300
