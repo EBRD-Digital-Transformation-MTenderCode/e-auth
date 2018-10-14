@@ -2,10 +2,7 @@ package com.procurement.auth.controller
 
 import com.procurement.auth.exception.security.*
 import com.procurement.auth.helper.getBearerTokenByAuthHeader
-import com.procurement.auth.model.AUTHORIZATION_HEADER_NAME
-import com.procurement.auth.model.BEARER_REALM
-import com.procurement.auth.model.ERROR_CODE_INVALID_TOKEN
-import com.procurement.auth.model.WWW_AUTHENTICATE_HEADER_NAME
+import com.procurement.auth.model.*
 import com.procurement.auth.model.response.*
 import com.procurement.auth.service.TokenService
 import org.slf4j.Logger
@@ -67,7 +64,7 @@ class TokenController(
                 ErrorRS(
                     listOf(
                         com.procurement.auth.model.response.Error(
-                            code = "auth.header.noSuch",
+                            code = CodesOfErrors.AUTH_HEADER_NO_SUCH.code,
                             description = "The authentication header is missing."
                         )
                     )
@@ -84,7 +81,7 @@ class TokenController(
                 ErrorRS(
                     listOf(
                         com.procurement.auth.model.response.Error(
-                            code = "auth.header.invalidType",
+                            code = CodesOfErrors.AUTH_HEADER_INVALID_TYPE.code,
                             description = "Invalid type of the authentication token. Expected type is 'Bearer'."
                         )
                     )
@@ -101,7 +98,7 @@ class TokenController(
                 ErrorRS(
                     listOf(
                         Error(
-                            code = "auth.token.empty",
+                            code = CodesOfErrors.AUTH_TOKEN_EMPTY.code,
                             description = "The authentication token is empty."
                         )
                     )
@@ -118,7 +115,7 @@ class TokenController(
                 ErrorRS(
                     listOf(
                         Error(
-                            code = "auth.token.verification",
+                            code = CodesOfErrors.AUTH_TOKEN_VERIFICATION.code,
                             description = "The error of verification of the authentication token."
                         )
                     )
@@ -138,7 +135,7 @@ class TokenController(
                 ErrorRS(
                     listOf(
                         Error(
-                            code = "auth.token.invalidType",
+                            code = CodesOfErrors.AUTH_TOKEN_INVALID_TYPE.code,
                             description = "Invalid the token type."
                         )
                     )
@@ -158,7 +155,7 @@ class TokenController(
                 ErrorRS(
                     listOf(
                         Error(
-                            code = "account.platform.unknown",
+                            code = CodesOfErrors.ACCOUNT_PLATFORM_UNKNOWN.code,
                             description = "The platform is unknown."
                         )
                     )
@@ -178,7 +175,7 @@ class TokenController(
                 ErrorRS(
                     listOf(
                         Error(
-                            code = "auth.token.expired",
+                            code = CodesOfErrors.AUTH_TOKEN_EXPIRED.code,
                             description = "The authentication token is expired."
                         )
                     )
@@ -198,7 +195,7 @@ class TokenController(
                 ErrorRS(
                     listOf(
                         Error(
-                            code = "account.revoked",
+                            code = CodesOfErrors.ACCOUNT_REVOKED.code,
                             description = "The account is revoked."
                         )
                     )

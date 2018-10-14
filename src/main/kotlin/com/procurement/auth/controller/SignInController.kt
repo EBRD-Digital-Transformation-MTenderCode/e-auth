@@ -4,6 +4,7 @@ import com.procurement.auth.exception.security.*
 import com.procurement.auth.helper.getUserCredentialsByAuthHeader
 import com.procurement.auth.model.AUTHORIZATION_HEADER_NAME
 import com.procurement.auth.model.BASIC_REALM
+import com.procurement.auth.model.CodesOfErrors
 import com.procurement.auth.model.WWW_AUTHENTICATE_HEADER_NAME
 import com.procurement.auth.model.response.*
 import com.procurement.auth.service.TokenService
@@ -53,7 +54,7 @@ class SignInController(
                 ErrorRS(
                     listOf(
                         com.procurement.auth.model.response.Error(
-                            code = "auth.header.noSuch",
+                            code = CodesOfErrors.AUTH_HEADER_NO_SUCH.code,
                             description = "The authentication header is missing."
                         )
                     )
@@ -70,7 +71,7 @@ class SignInController(
                 ErrorRS(
                     listOf(
                         com.procurement.auth.model.response.Error(
-                            code = "auth.header.invalidType",
+                            code = CodesOfErrors.AUTH_HEADER_INVALID_TYPE.code,
                             description = "Invalid type of the authentication token. Expected type is 'Basic'."
                         )
                     )
@@ -87,7 +88,7 @@ class SignInController(
                 ErrorRS(
                     listOf(
                         com.procurement.auth.model.response.Error(
-                            code = "auth.token.empty",
+                            code = CodesOfErrors.AUTH_TOKEN_EMPTY.code,
                             description = "The authentication token is empty."
                         )
                     )
@@ -104,7 +105,7 @@ class SignInController(
                 ErrorRS(
                     listOf(
                         com.procurement.auth.model.response.Error(
-                            code = "auth.token.invalidFormat",
+                            code = CodesOfErrors.AUTH_TOKEN_INVALID_FORMAT.code,
                             description = "Invalid format of the authentication token."
                         )
                     )
@@ -121,7 +122,7 @@ class SignInController(
                 ErrorRS(
                     listOf(
                         com.procurement.auth.model.response.Error(
-                            code = "account.invalidCredentials",
+                            code = CodesOfErrors.ACCOUNT_INVALID_CREDENTIALS.code,
                             description = "Invalid credentials."
                         )
                     )
@@ -141,7 +142,7 @@ class SignInController(
                 ErrorRS(
                     listOf(
                         com.procurement.auth.model.response.Error(
-                            code = "account.revoked",
+                            code = CodesOfErrors.ACCOUNT_REVOKED.code,
                             description = "The account is revoked."
                         )
                     )

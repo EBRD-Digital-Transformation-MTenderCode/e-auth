@@ -107,7 +107,7 @@ class TokenVerificationControllerTest {
             .andExpect(content().contentType("application/json;charset=UTF-8"))
             .andExpect(jsonPath("$.success", equalTo(false)))
             .andExpect(jsonPath("$.errors.length()", equalTo(1)))
-            .andExpect(jsonPath("$.errors[0].code", equalTo("auth.header.noSuch")))
+            .andExpect(jsonPath("$.errors[0].code", equalTo("401.81.02.01")))
             .andExpect(jsonPath("$.errors[0].description", equalTo("The authentication header is missing.")))
             .andDo(
                 document(
@@ -136,7 +136,7 @@ class TokenVerificationControllerTest {
             .andExpect(content().contentType("application/json;charset=UTF-8"))
             .andExpect(jsonPath("$.success", equalTo(false)))
             .andExpect(jsonPath("$.errors.length()", equalTo(1)))
-            .andExpect(jsonPath("$.errors[0].code", equalTo("auth.header.invalidType")))
+            .andExpect(jsonPath("$.errors[0].code", equalTo("401.81.02.02")))
             .andExpect(
                 jsonPath(
                     "$.errors[0].description",
@@ -170,7 +170,7 @@ class TokenVerificationControllerTest {
             .andExpect(content().contentType("application/json;charset=UTF-8"))
             .andExpect(jsonPath("$.success", equalTo(false)))
             .andExpect(jsonPath("$.errors.length()", equalTo(1)))
-            .andExpect(jsonPath("$.errors[0].code", equalTo("auth.token.empty")))
+            .andExpect(jsonPath("$.errors[0].code", equalTo("401.81.03.01")))
             .andExpect(jsonPath("$.errors[0].description", equalTo("The authentication token is empty.")))
             .andDo(
                 document(
@@ -203,7 +203,7 @@ class TokenVerificationControllerTest {
             .andExpect(content().contentType("application/json;charset=UTF-8"))
             .andExpect(jsonPath("$.success", equalTo(false)))
             .andExpect(jsonPath("$.errors.length()", equalTo(1)))
-            .andExpect(jsonPath("$.errors[0].code", equalTo("auth.token.verification")))
+            .andExpect(jsonPath("$.errors[0].code", equalTo("401.81.03.04")))
             .andExpect(
                 jsonPath(
                     "$.errors[0].description",
@@ -241,7 +241,7 @@ class TokenVerificationControllerTest {
             .andExpect(content().contentType("application/json;charset=UTF-8"))
             .andExpect(jsonPath("$.success", equalTo(false)))
             .andExpect(jsonPath("$.errors.length()", equalTo(1)))
-            .andExpect(jsonPath("$.errors[0].code", equalTo("auth.token.expired")))
+            .andExpect(jsonPath("$.errors[0].code", equalTo("401.81.03.05")))
             .andExpect(jsonPath("$.errors[0].description", equalTo("The authentication token is expired.")))
             .andDo(
                 document(
@@ -270,11 +270,11 @@ class TokenVerificationControllerTest {
             get(URL)
                 .header(AUTHORIZATION_HEADER_NAME, authHeaderValue))
             .andExpect(status().isUnauthorized)
-            .andExpect(header().string(WWW_AUTHENTICATE_HEADER_NAME,wwwAuthHeaderValue))
+            .andExpect(header().string(WWW_AUTHENTICATE_HEADER_NAME, wwwAuthHeaderValue))
             .andExpect(content().contentType("application/json;charset=UTF-8"))
             .andExpect(jsonPath("$.success", equalTo(false)))
             .andExpect(jsonPath("$.errors.length()", equalTo(1)))
-            .andExpect(jsonPath("$.errors[0].code", equalTo("account.platform.unknown")))
+            .andExpect(jsonPath("$.errors[0].code", equalTo("401.81.01.03")))
             .andExpect(jsonPath("$.errors[0].description", equalTo("The platform is unknown.")))
             .andDo(
                 document(
@@ -303,11 +303,11 @@ class TokenVerificationControllerTest {
             get(URL)
                 .header(AUTHORIZATION_HEADER_NAME, authHeaderValue))
             .andExpect(status().isUnauthorized)
-            .andExpect(header().string(WWW_AUTHENTICATE_HEADER_NAME,wwwAuthHeaderValue))
+            .andExpect(header().string(WWW_AUTHENTICATE_HEADER_NAME, wwwAuthHeaderValue))
             .andExpect(content().contentType("application/json;charset=UTF-8"))
             .andExpect(jsonPath("$.success", equalTo(false)))
             .andExpect(jsonPath("$.errors.length()", equalTo(1)))
-            .andExpect(jsonPath("$.errors[0].code", equalTo("auth.token.invalidType")))
+            .andExpect(jsonPath("$.errors[0].code", equalTo("401.81.03.02")))
             .andExpect(jsonPath("$.errors[0].description", equalTo("Invalid the token type.")))
             .andDo(
                 document(
@@ -340,7 +340,7 @@ class TokenVerificationControllerTest {
             .andExpect(content().contentType("application/json;charset=UTF-8"))
             .andExpect(jsonPath("$.success", equalTo(false)))
             .andExpect(jsonPath("$.errors.length()", equalTo(1)))
-            .andExpect(jsonPath("$.errors[0].code", equalTo("account.revoked")))
+            .andExpect(jsonPath("$.errors[0].code", equalTo("401.81.01.02")))
             .andExpect(jsonPath("$.errors[0].description", equalTo("The account is revoked.")))
             .andDo(
                 document(

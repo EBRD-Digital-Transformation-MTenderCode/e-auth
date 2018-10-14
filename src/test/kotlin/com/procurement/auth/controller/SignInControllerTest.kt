@@ -102,7 +102,7 @@ class SignInControllerTest {
             .andExpect(content().contentType("application/json;charset=UTF-8"))
             .andExpect(jsonPath("$.success", equalTo(false)))
             .andExpect(jsonPath("$.errors.length()", equalTo(1)))
-            .andExpect(jsonPath("$.errors[0].code", equalTo("auth.header.noSuch")))
+            .andExpect(jsonPath("$.errors[0].code", equalTo("401.81.02.01")))
             .andExpect(
                 jsonPath(
                     "$.errors[0].description",
@@ -136,7 +136,7 @@ class SignInControllerTest {
             .andExpect(content().contentType("application/json;charset=UTF-8"))
             .andExpect(jsonPath("$.success", equalTo(false)))
             .andExpect(jsonPath("$.errors.length()", equalTo(1)))
-            .andExpect(jsonPath("$.errors[0].code", equalTo("auth.header.invalidType")))
+            .andExpect(jsonPath("$.errors[0].code", equalTo("401.81.02.02")))
             .andExpect(
                 jsonPath(
                     "$.errors[0].description",
@@ -170,7 +170,7 @@ class SignInControllerTest {
             .andExpect(content().contentType("application/json;charset=UTF-8"))
             .andExpect(jsonPath("$.success", equalTo(false)))
             .andExpect(jsonPath("$.errors.length()", equalTo(1)))
-            .andExpect(jsonPath("$.errors[0].code", equalTo("auth.token.empty")))
+            .andExpect(jsonPath("$.errors[0].code", equalTo("401.81.03.01")))
             .andExpect(
                 jsonPath(
                     "$.errors[0].description",
@@ -205,7 +205,7 @@ class SignInControllerTest {
             .andExpect(content().contentType("application/json;charset=UTF-8"))
             .andExpect(jsonPath("$.success", equalTo(false)))
             .andExpect(jsonPath("$.errors.length()", equalTo(1)))
-            .andExpect(jsonPath("$.errors[0].code", equalTo("auth.token.invalidFormat")))
+            .andExpect(jsonPath("$.errors[0].code", equalTo("401.81.03.03")))
             .andExpect(
                 jsonPath(
                     "$.errors[0].description",
@@ -244,7 +244,7 @@ class SignInControllerTest {
             .andExpect(content().contentType("application/json;charset=UTF-8"))
             .andExpect(jsonPath("$.success", equalTo(false)))
             .andExpect(jsonPath("$.errors.length()", equalTo(1)))
-            .andExpect(jsonPath("$.errors[0].code", equalTo("account.invalidCredentials")))
+            .andExpect(jsonPath("$.errors[0].code", equalTo("401.81.01.01")))
             .andExpect(jsonPath("$.errors[0].description", equalTo("Invalid credentials.")))
             .andDo(
                 document(
@@ -278,7 +278,7 @@ class SignInControllerTest {
             .andExpect(content().contentType("application/json;charset=UTF-8"))
             .andExpect(jsonPath("$.success", equalTo(false)))
             .andExpect(jsonPath("$.errors.length()", equalTo(1)))
-            .andExpect(jsonPath("$.errors[0].code", equalTo("account.revoked")))
+            .andExpect(jsonPath("$.errors[0].code", equalTo("401.81.01.02")))
             .andExpect(jsonPath("$.errors[0].description", equalTo("The account is revoked.")))
             .andDo(
                 document(

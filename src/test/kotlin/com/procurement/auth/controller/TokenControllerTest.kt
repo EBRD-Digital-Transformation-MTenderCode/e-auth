@@ -6,17 +6,8 @@ import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
 import com.procurement.auth.ACCESS_TOKEN
 import com.procurement.auth.REFRESH_TOKEN
-import com.procurement.auth.exception.security.AccountRevokedException
-import com.procurement.auth.exception.security.PlatformUnknownException
-import com.procurement.auth.exception.security.TokenExpiredException
-import com.procurement.auth.exception.security.VerificationTokenException
-import com.procurement.auth.exception.security.WrongTypeRefreshTokenException
-import com.procurement.auth.model.AUTHORIZATION_HEADER_NAME
-import com.procurement.auth.model.AUTHORIZATION_PREFIX_BASIC
-import com.procurement.auth.model.AUTHORIZATION_PREFIX_BEARER
-import com.procurement.auth.model.BEARER_REALM
-import com.procurement.auth.model.ERROR_CODE_INVALID_TOKEN
-import com.procurement.auth.model.WWW_AUTHENTICATE_HEADER_NAME
+import com.procurement.auth.exception.security.*
+import com.procurement.auth.model.*
 import com.procurement.auth.model.token.AuthTokens
 import com.procurement.auth.service.TokenService
 import org.apache.commons.codec.binary.Base64
@@ -41,10 +32,7 @@ import org.springframework.restdocs.payload.PayloadDocumentation.responseFields
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.header
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.test.web.servlet.setup.StandaloneMockMvcBuilder
 
@@ -122,7 +110,7 @@ class TokenControllerTest {
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andExpect(jsonPath("$.success", equalTo(false)))
                 .andExpect(jsonPath("$.errors.length()", equalTo(1)))
-                .andExpect(jsonPath("$.errors[0].code", equalTo("auth.header.noSuch")))
+                .andExpect(jsonPath("$.errors[0].code", equalTo("401.81.02.01")))
                 .andExpect(jsonPath("$.errors[0].description", equalTo("The authentication header is missing.")))
                 .andDo(
                     document(
@@ -152,7 +140,7 @@ class TokenControllerTest {
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andExpect(jsonPath("$.success", equalTo(false)))
                 .andExpect(jsonPath("$.errors.length()", equalTo(1)))
-                .andExpect(jsonPath("$.errors[0].code", equalTo("auth.header.invalidType")))
+                .andExpect(jsonPath("$.errors[0].code", equalTo("401.81.02.02")))
                 .andExpect(
                     jsonPath(
                         "$.errors[0].description",
@@ -186,7 +174,7 @@ class TokenControllerTest {
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andExpect(jsonPath("$.success", equalTo(false)))
                 .andExpect(jsonPath("$.errors.length()", equalTo(1)))
-                .andExpect(jsonPath("$.errors[0].code", equalTo("auth.token.empty")))
+                .andExpect(jsonPath("$.errors[0].code", equalTo("401.81.03.01")))
                 .andExpect(jsonPath("$.errors[0].description", equalTo("The authentication token is empty.")))
                 .andDo(
                     document(
@@ -219,7 +207,7 @@ class TokenControllerTest {
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andExpect(jsonPath("$.success", equalTo(false)))
                 .andExpect(jsonPath("$.errors.length()", equalTo(1)))
-                .andExpect(jsonPath("$.errors[0].code", equalTo("auth.token.verification")))
+                .andExpect(jsonPath("$.errors[0].code", equalTo("401.81.03.04")))
                 .andExpect(
                     jsonPath(
                         "$.errors[0].description",
@@ -258,7 +246,7 @@ class TokenControllerTest {
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andExpect(jsonPath("$.success", equalTo(false)))
                 .andExpect(jsonPath("$.errors.length()", equalTo(1)))
-                .andExpect(jsonPath("$.errors[0].code", equalTo("auth.token.expired")))
+                .andExpect(jsonPath("$.errors[0].code", equalTo("401.81.03.05")))
                 .andExpect(jsonPath("$.errors[0].description", equalTo("The authentication token is expired.")))
                 .andDo(
                     document(
@@ -292,7 +280,7 @@ class TokenControllerTest {
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andExpect(jsonPath("$.success", equalTo(false)))
                 .andExpect(jsonPath("$.errors.length()", equalTo(1)))
-                .andExpect(jsonPath("$.errors[0].code", equalTo("account.platform.unknown")))
+                .andExpect(jsonPath("$.errors[0].code", equalTo("401.81.01.03")))
                 .andExpect(jsonPath("$.errors[0].description", equalTo("The platform is unknown.")))
                 .andDo(
                     document(
@@ -326,7 +314,7 @@ class TokenControllerTest {
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andExpect(jsonPath("$.success", equalTo(false)))
                 .andExpect(jsonPath("$.errors.length()", equalTo(1)))
-                .andExpect(jsonPath("$.errors[0].code", equalTo("auth.token.invalidType")))
+                .andExpect(jsonPath("$.errors[0].code", equalTo("401.81.03.02")))
                 .andExpect(jsonPath("$.errors[0].description", equalTo("Invalid the token type.")))
                 .andDo(
                     document(
@@ -360,7 +348,7 @@ class TokenControllerTest {
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andExpect(jsonPath("$.success", equalTo(false)))
                 .andExpect(jsonPath("$.errors.length()", equalTo(1)))
-                .andExpect(jsonPath("$.errors[0].code", equalTo("account.revoked")))
+                .andExpect(jsonPath("$.errors[0].code", equalTo("401.81.01.02")))
                 .andExpect(jsonPath("$.errors[0].description", equalTo("The account is revoked.")))
                 .andDo(
                     document(
@@ -420,7 +408,7 @@ class TokenControllerTest {
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andExpect(jsonPath("$.success", equalTo(false)))
                 .andExpect(jsonPath("$.errors.length()", equalTo(1)))
-                .andExpect(jsonPath("$.errors[0].code", equalTo("auth.header.noSuch")))
+                .andExpect(jsonPath("$.errors[0].code", equalTo("401.81.02.01")))
                 .andExpect(jsonPath("$.errors[0].description", equalTo("The authentication header is missing.")))
                 .andDo(
                     document(
@@ -450,7 +438,7 @@ class TokenControllerTest {
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andExpect(jsonPath("$.success", equalTo(false)))
                 .andExpect(jsonPath("$.errors.length()", equalTo(1)))
-                .andExpect(jsonPath("$.errors[0].code", equalTo("auth.header.invalidType")))
+                .andExpect(jsonPath("$.errors[0].code", equalTo("401.81.02.02")))
                 .andExpect(
                     jsonPath(
                         "$.errors[0].description",
@@ -484,7 +472,7 @@ class TokenControllerTest {
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andExpect(jsonPath("$.success", equalTo(false)))
                 .andExpect(jsonPath("$.errors.length()", equalTo(1)))
-                .andExpect(jsonPath("$.errors[0].code", equalTo("auth.token.empty")))
+                .andExpect(jsonPath("$.errors[0].code", equalTo("401.81.03.01")))
                 .andExpect(jsonPath("$.errors[0].description", equalTo("The authentication token is empty.")))
                 .andDo(
                     document(
@@ -517,7 +505,7 @@ class TokenControllerTest {
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andExpect(jsonPath("$.success", equalTo(false)))
                 .andExpect(jsonPath("$.errors.length()", equalTo(1)))
-                .andExpect(jsonPath("$.errors[0].code", equalTo("auth.token.verification")))
+                .andExpect(jsonPath("$.errors[0].code", equalTo("401.81.03.04")))
                 .andExpect(
                     jsonPath(
                         "$.errors[0].description",
@@ -556,7 +544,7 @@ class TokenControllerTest {
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andExpect(jsonPath("$.success", equalTo(false)))
                 .andExpect(jsonPath("$.errors.length()", equalTo(1)))
-                .andExpect(jsonPath("$.errors[0].code", equalTo("auth.token.expired")))
+                .andExpect(jsonPath("$.errors[0].code", equalTo("401.81.03.05")))
                 .andExpect(jsonPath("$.errors[0].description", equalTo("The authentication token is expired.")))
                 .andDo(
                     document(
@@ -590,7 +578,7 @@ class TokenControllerTest {
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andExpect(jsonPath("$.success", equalTo(false)))
                 .andExpect(jsonPath("$.errors.length()", equalTo(1)))
-                .andExpect(jsonPath("$.errors[0].code", equalTo("auth.token.invalidType")))
+                .andExpect(jsonPath("$.errors[0].code", equalTo("401.81.03.02")))
                 .andExpect(jsonPath("$.errors[0].description", equalTo("Invalid the token type.")))
                 .andDo(
                     document(
