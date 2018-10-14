@@ -74,7 +74,6 @@ class SignInControllerTest {
                 .header(AUTHORIZATION_HEADER_NAME, authHeaderValue))
             .andExpect(status().isOk)
             .andExpect(content().contentType("application/json;charset=UTF-8"))
-            .andExpect(jsonPath("$.success", equalTo(true)))
             .andExpect(jsonPath("$.data.tokens.access", equalTo(ACCESS_TOKEN)))
             .andExpect(jsonPath("$.data.tokens.refresh", equalTo(REFRESH_TOKEN)))
             .andDo(
@@ -100,7 +99,6 @@ class SignInControllerTest {
             .andExpect(status().isUnauthorized)
             .andExpect(header().string(WWW_AUTHENTICATE_HEADER_NAME, wwwAuthHeaderValue))
             .andExpect(content().contentType("application/json;charset=UTF-8"))
-            .andExpect(jsonPath("$.success", equalTo(false)))
             .andExpect(jsonPath("$.errors.length()", equalTo(1)))
             .andExpect(jsonPath("$.errors[0].code", equalTo("401.81.02.01")))
             .andExpect(
@@ -134,7 +132,6 @@ class SignInControllerTest {
             .andExpect(status().isUnauthorized)
             .andExpect(header().string(WWW_AUTHENTICATE_HEADER_NAME, wwwAuthHeaderValue))
             .andExpect(content().contentType("application/json;charset=UTF-8"))
-            .andExpect(jsonPath("$.success", equalTo(false)))
             .andExpect(jsonPath("$.errors.length()", equalTo(1)))
             .andExpect(jsonPath("$.errors[0].code", equalTo("401.81.02.02")))
             .andExpect(
@@ -168,7 +165,6 @@ class SignInControllerTest {
             .andExpect(status().isUnauthorized)
             .andExpect(header().string(WWW_AUTHENTICATE_HEADER_NAME, wwwAuthHeaderValue))
             .andExpect(content().contentType("application/json;charset=UTF-8"))
-            .andExpect(jsonPath("$.success", equalTo(false)))
             .andExpect(jsonPath("$.errors.length()", equalTo(1)))
             .andExpect(jsonPath("$.errors[0].code", equalTo("401.81.03.01")))
             .andExpect(
@@ -203,7 +199,6 @@ class SignInControllerTest {
             .andExpect(status().isUnauthorized)
             .andExpect(header().string(WWW_AUTHENTICATE_HEADER_NAME, wwwAuthHeaderValue))
             .andExpect(content().contentType("application/json;charset=UTF-8"))
-            .andExpect(jsonPath("$.success", equalTo(false)))
             .andExpect(jsonPath("$.errors.length()", equalTo(1)))
             .andExpect(jsonPath("$.errors[0].code", equalTo("401.81.03.03")))
             .andExpect(
@@ -242,7 +237,6 @@ class SignInControllerTest {
             .andExpect(status().isUnauthorized)
             .andExpect(header().string(WWW_AUTHENTICATE_HEADER_NAME, wwwAuthHeaderValue))
             .andExpect(content().contentType("application/json;charset=UTF-8"))
-            .andExpect(jsonPath("$.success", equalTo(false)))
             .andExpect(jsonPath("$.errors.length()", equalTo(1)))
             .andExpect(jsonPath("$.errors[0].code", equalTo("401.81.01.01")))
             .andExpect(jsonPath("$.errors[0].description", equalTo("Invalid credentials.")))
@@ -276,7 +270,6 @@ class SignInControllerTest {
             .andExpect(status().isUnauthorized)
             .andExpect(header().string(WWW_AUTHENTICATE_HEADER_NAME, wwwAuthHeaderValue))
             .andExpect(content().contentType("application/json;charset=UTF-8"))
-            .andExpect(jsonPath("$.success", equalTo(false)))
             .andExpect(jsonPath("$.errors.length()", equalTo(1)))
             .andExpect(jsonPath("$.errors[0].code", equalTo("401.81.01.02")))
             .andExpect(jsonPath("$.errors[0].description", equalTo("The account is revoked.")))

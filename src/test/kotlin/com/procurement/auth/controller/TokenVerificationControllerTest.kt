@@ -10,7 +10,6 @@ import com.procurement.auth.exception.security.*
 import com.procurement.auth.model.*
 import com.procurement.auth.model.token.AuthTokens
 import com.procurement.auth.service.TokenService
-import org.hamcrest.core.IsEqual
 import org.hamcrest.core.IsEqual.equalTo
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -79,7 +78,6 @@ class TokenVerificationControllerTest {
                 .header(AUTHORIZATION_HEADER_NAME, authHeaderValue))
             .andExpect(status().isOk)
             .andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=UTF-8"))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.success", IsEqual.equalTo(true)))
             .andExpect(MockMvcResultMatchers.jsonPath("$.data.tokens.access", equalTo(ACCESS_TOKEN)))
             .andExpect(MockMvcResultMatchers.jsonPath("$.data.tokens.refresh", equalTo(REFRESH_TOKEN)))
             .andDo(
@@ -105,7 +103,6 @@ class TokenVerificationControllerTest {
             .andExpect(status().isUnauthorized)
             .andExpect(header().string(WWW_AUTHENTICATE_HEADER_NAME, wwwAuthHeaderValue))
             .andExpect(content().contentType("application/json;charset=UTF-8"))
-            .andExpect(jsonPath("$.success", equalTo(false)))
             .andExpect(jsonPath("$.errors.length()", equalTo(1)))
             .andExpect(jsonPath("$.errors[0].code", equalTo("401.81.02.01")))
             .andExpect(jsonPath("$.errors[0].description", equalTo("The authentication header is missing.")))
@@ -134,7 +131,6 @@ class TokenVerificationControllerTest {
             .andExpect(status().isUnauthorized)
             .andExpect(header().string(WWW_AUTHENTICATE_HEADER_NAME, wwwAuthHeaderValue))
             .andExpect(content().contentType("application/json;charset=UTF-8"))
-            .andExpect(jsonPath("$.success", equalTo(false)))
             .andExpect(jsonPath("$.errors.length()", equalTo(1)))
             .andExpect(jsonPath("$.errors[0].code", equalTo("401.81.02.02")))
             .andExpect(
@@ -168,7 +164,6 @@ class TokenVerificationControllerTest {
             .andExpect(status().isUnauthorized)
             .andExpect(header().string(WWW_AUTHENTICATE_HEADER_NAME, wwwAuthHeaderValue))
             .andExpect(content().contentType("application/json;charset=UTF-8"))
-            .andExpect(jsonPath("$.success", equalTo(false)))
             .andExpect(jsonPath("$.errors.length()", equalTo(1)))
             .andExpect(jsonPath("$.errors[0].code", equalTo("401.81.03.01")))
             .andExpect(jsonPath("$.errors[0].description", equalTo("The authentication token is empty.")))
@@ -201,7 +196,6 @@ class TokenVerificationControllerTest {
             .andExpect(status().isUnauthorized)
             .andExpect(header().string(WWW_AUTHENTICATE_HEADER_NAME, wwwAuthHeaderValue))
             .andExpect(content().contentType("application/json;charset=UTF-8"))
-            .andExpect(jsonPath("$.success", equalTo(false)))
             .andExpect(jsonPath("$.errors.length()", equalTo(1)))
             .andExpect(jsonPath("$.errors[0].code", equalTo("401.81.03.04")))
             .andExpect(
@@ -239,7 +233,6 @@ class TokenVerificationControllerTest {
             .andExpect(status().isUnauthorized)
             .andExpect(header().string(WWW_AUTHENTICATE_HEADER_NAME, wwwAuthHeaderValue))
             .andExpect(content().contentType("application/json;charset=UTF-8"))
-            .andExpect(jsonPath("$.success", equalTo(false)))
             .andExpect(jsonPath("$.errors.length()", equalTo(1)))
             .andExpect(jsonPath("$.errors[0].code", equalTo("401.81.03.05")))
             .andExpect(jsonPath("$.errors[0].description", equalTo("The authentication token is expired.")))
@@ -272,7 +265,6 @@ class TokenVerificationControllerTest {
             .andExpect(status().isUnauthorized)
             .andExpect(header().string(WWW_AUTHENTICATE_HEADER_NAME, wwwAuthHeaderValue))
             .andExpect(content().contentType("application/json;charset=UTF-8"))
-            .andExpect(jsonPath("$.success", equalTo(false)))
             .andExpect(jsonPath("$.errors.length()", equalTo(1)))
             .andExpect(jsonPath("$.errors[0].code", equalTo("401.81.01.03")))
             .andExpect(jsonPath("$.errors[0].description", equalTo("The platform is unknown.")))
@@ -305,7 +297,6 @@ class TokenVerificationControllerTest {
             .andExpect(status().isUnauthorized)
             .andExpect(header().string(WWW_AUTHENTICATE_HEADER_NAME, wwwAuthHeaderValue))
             .andExpect(content().contentType("application/json;charset=UTF-8"))
-            .andExpect(jsonPath("$.success", equalTo(false)))
             .andExpect(jsonPath("$.errors.length()", equalTo(1)))
             .andExpect(jsonPath("$.errors[0].code", equalTo("401.81.03.02")))
             .andExpect(jsonPath("$.errors[0].description", equalTo("Invalid the token type.")))
@@ -338,7 +329,6 @@ class TokenVerificationControllerTest {
             .andExpect(status().isUnauthorized)
             .andExpect(header().string(WWW_AUTHENTICATE_HEADER_NAME, wwwAuthHeaderValue))
             .andExpect(content().contentType("application/json;charset=UTF-8"))
-            .andExpect(jsonPath("$.success", equalTo(false)))
             .andExpect(jsonPath("$.errors.length()", equalTo(1)))
             .andExpect(jsonPath("$.errors[0].code", equalTo("401.81.01.02")))
             .andExpect(jsonPath("$.errors[0].description", equalTo("The account is revoked.")))

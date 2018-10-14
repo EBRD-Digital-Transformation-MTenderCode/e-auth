@@ -3,10 +3,6 @@ package com.procurement.auth.model
 import com.procurement.auth.configuration.properties.GlobalProperties
 import org.springframework.http.HttpStatus
 
-//interface CodeError {
-//    val code: String
-//}
-
 enum class CodesOfErrors(val httpStatus: HttpStatus, group: String, id: String) {
     ACCOUNT_INVALID_CREDENTIALS(httpStatus = HttpStatus.UNAUTHORIZED, group = "01", id = "01"),
     ACCOUNT_REVOKED(httpStatus = HttpStatus.UNAUTHORIZED, group = "01", id = "02"),

@@ -56,7 +56,7 @@ class TokenController(
     }
 
     @ExceptionHandler(value = [NoSuchAuthHeaderException::class])
-    fun noSuchAuthHeader(e: NoSuchAuthHeaderException): ResponseEntity<BaseRS> {
+    fun noSuchAuthHeader(e: NoSuchAuthHeaderException): ResponseEntity<ErrorRS> {
         log.warn(e.message)
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED.value())
             .header(WWW_AUTHENTICATE_HEADER_NAME, BEARER_REALM)
@@ -73,7 +73,7 @@ class TokenController(
     }
 
     @ExceptionHandler(value = [InvalidAuthHeaderTypeException::class])
-    fun invalidAuthHeaderType(e: InvalidAuthHeaderTypeException): ResponseEntity<BaseRS> {
+    fun invalidAuthHeaderType(e: InvalidAuthHeaderTypeException): ResponseEntity<ErrorRS> {
         log.warn(e.message)
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED.value())
             .header(WWW_AUTHENTICATE_HEADER_NAME, BEARER_REALM)
@@ -90,7 +90,7 @@ class TokenController(
     }
 
     @ExceptionHandler(value = [EmptyAuthTokenException::class])
-    fun emptyAuthToken(e: EmptyAuthTokenException): ResponseEntity<BaseRS> {
+    fun emptyAuthToken(e: EmptyAuthTokenException): ResponseEntity<ErrorRS> {
         SignInController.log.warn(e.message)
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED.value())
             .header(WWW_AUTHENTICATE_HEADER_NAME, BEARER_REALM)
@@ -107,7 +107,7 @@ class TokenController(
     }
 
     @ExceptionHandler(value = [VerificationTokenException::class])
-    fun verificationToken(e: VerificationTokenException): ResponseEntity<BaseRS> {
+    fun verificationToken(e: VerificationTokenException): ResponseEntity<ErrorRS> {
         SignInController.log.warn(e.message)
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED.value())
             .header(WWW_AUTHENTICATE_HEADER_NAME, BEARER_REALM)
@@ -124,7 +124,7 @@ class TokenController(
     }
 
     @ExceptionHandler(value = [WrongTypeRefreshTokenException::class])
-    fun wrongTypeToken(e: WrongTypeRefreshTokenException): ResponseEntity<BaseRS> {
+    fun wrongTypeToken(e: WrongTypeRefreshTokenException): ResponseEntity<ErrorRS> {
         log.warn(e.message)
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED.value())
             .header(
@@ -144,7 +144,7 @@ class TokenController(
     }
 
     @ExceptionHandler(value = [PlatformUnknownException::class])
-    fun platformNotFound(e: PlatformUnknownException): ResponseEntity<BaseRS> {
+    fun platformNotFound(e: PlatformUnknownException): ResponseEntity<ErrorRS> {
         log.warn(e.message)
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED.value())
             .header(
@@ -164,7 +164,7 @@ class TokenController(
     }
 
     @ExceptionHandler(value = [TokenExpiredException::class])
-    fun tokenExpired(e: TokenExpiredException): ResponseEntity<BaseRS> {
+    fun tokenExpired(e: TokenExpiredException): ResponseEntity<ErrorRS> {
         log.warn(e.message)
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED.value())
             .header(
@@ -184,7 +184,7 @@ class TokenController(
     }
 
     @ExceptionHandler(value = [AccountRevokedException::class])
-    fun accountRevoked(e: AccountRevokedException): ResponseEntity<BaseRS> {
+    fun accountRevoked(e: AccountRevokedException): ResponseEntity<ErrorRS> {
         log.warn(e.message)
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED.value())
             .header(

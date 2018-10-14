@@ -46,7 +46,7 @@ class SignInController(
     }
 
     @ExceptionHandler(value = [NoSuchAuthHeaderException::class])
-    fun noSuchAuthHeader(e: NoSuchAuthHeaderException): ResponseEntity<BaseRS> {
+    fun noSuchAuthHeader(e: NoSuchAuthHeaderException): ResponseEntity<ErrorRS> {
         log.warn(e.message)
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED.value())
             .header(WWW_AUTHENTICATE_HEADER_NAME, BASIC_REALM)
@@ -63,7 +63,7 @@ class SignInController(
     }
 
     @ExceptionHandler(value = [InvalidAuthHeaderTypeException::class])
-    fun invalidAuthHeaderType(e: InvalidAuthHeaderTypeException): ResponseEntity<BaseRS> {
+    fun invalidAuthHeaderType(e: InvalidAuthHeaderTypeException): ResponseEntity<ErrorRS> {
         log.warn(e.message)
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED.value())
             .header(WWW_AUTHENTICATE_HEADER_NAME, BASIC_REALM)
@@ -80,7 +80,7 @@ class SignInController(
     }
 
     @ExceptionHandler(value = [EmptyAuthTokenException::class])
-    fun emptyAuthToken(e: EmptyAuthTokenException): ResponseEntity<BaseRS> {
+    fun emptyAuthToken(e: EmptyAuthTokenException): ResponseEntity<ErrorRS> {
         log.warn(e.message)
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED.value())
             .header(WWW_AUTHENTICATE_HEADER_NAME, BASIC_REALM)
@@ -97,7 +97,7 @@ class SignInController(
     }
 
     @ExceptionHandler(value = [InvalidAuthTokenFormatException::class])
-    fun invalidAuthTokenFormat(e: InvalidAuthTokenFormatException): ResponseEntity<BaseRS> {
+    fun invalidAuthTokenFormat(e: InvalidAuthTokenFormatException): ResponseEntity<ErrorRS> {
         log.warn(e.message)
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED.value())
             .header(WWW_AUTHENTICATE_HEADER_NAME, BASIC_REALM)
@@ -114,7 +114,7 @@ class SignInController(
     }
 
     @ExceptionHandler(value = [InvalidCredentialsException::class])
-    fun invalidPassword(e: InvalidCredentialsException): ResponseEntity<BaseRS> {
+    fun invalidPassword(e: InvalidCredentialsException): ResponseEntity<ErrorRS> {
         log.warn(e.message)
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED.value())
             .header(WWW_AUTHENTICATE_HEADER_NAME, BASIC_REALM)
@@ -131,7 +131,7 @@ class SignInController(
     }
 
     @ExceptionHandler(value = [AccountRevokedException::class])
-    fun accountRevoked(e: AccountRevokedException): ResponseEntity<BaseRS> {
+    fun accountRevoked(e: AccountRevokedException): ResponseEntity<ErrorRS> {
         log.warn(e.message)
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED.value())
             .header(

@@ -12,13 +12,9 @@ import org.springframework.restdocs.snippet.Attributes.key
 import java.util.*
 
 object ModelDescription {
-    private const val SUCCESS_DESCRIPTION =
-        "The attribute 'success' contains the value 'true' if the operation was successful, otherwise is 'false'."
-
     object SignIn {
         fun responseSuccessful(): List<FieldDescriptor> {
             return listOf(
-                getFieldDescriptor("success", SUCCESS_DESCRIPTION),
                 getFieldDescriptor("data", "The data of response."),
                 getFieldDescriptor("data.tokens", "The object contains an access token and a refresh token."),
                 getFieldDescriptor("data.tokens.access", "The access token."),
@@ -30,7 +26,6 @@ object ModelDescription {
     object Refresh {
         fun responseSuccessful(): List<FieldDescriptor> {
             return listOf(
-                getFieldDescriptor("success", SUCCESS_DESCRIPTION),
                 getFieldDescriptor("data", "The data of response."),
                 getFieldDescriptor("data.tokens", "The object contains an access token and a refresh token."),
                 getFieldDescriptor("data.tokens.access", "The access token."),
@@ -42,14 +37,12 @@ object ModelDescription {
     object Verification {
         fun responseSuccessful(): List<FieldDescriptor> {
             return listOf(
-                getFieldDescriptor("success", SUCCESS_DESCRIPTION)
             )
         }
     }
 
     fun responseError(): List<FieldDescriptor> {
         return listOf(
-            getFieldDescriptor("success", SUCCESS_DESCRIPTION),
             getFieldDescriptor("errors", "List of errors."),
             getFieldDescriptor("errors[].code", "The code of the error."),
             getFieldDescriptor("errors[].description", "The description of the error.")

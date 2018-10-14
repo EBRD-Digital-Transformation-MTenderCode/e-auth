@@ -4,11 +4,11 @@ import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonPropertyOrder
 
-@JsonPropertyOrder("success", "data")
+@JsonPropertyOrder("data")
 data class TokenRS @JsonCreator constructor(
     @field:JsonProperty("data")
     @param:JsonProperty("data") val data: Data
-) : BaseRS(true)
+)
 
 data class Data @JsonCreator
 constructor(
