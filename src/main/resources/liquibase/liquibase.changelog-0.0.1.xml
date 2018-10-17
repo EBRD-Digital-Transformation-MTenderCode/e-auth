@@ -16,6 +16,7 @@
                 platform_id UUID NOT NULL,
                 enabled BOOLEAN NOT NULL
             );
+            ALTER TABLE public.accounts ADD CONSTRAINT accounts_pk PRIMARY KEY (id);
         </sql>
     </changeSet>
 </databaseChangeLog>
