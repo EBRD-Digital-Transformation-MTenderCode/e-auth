@@ -1,0 +1,11 @@
+server:
+  port: @project.service.port@
+
+spring:
+  application:
+    name: auth
+
+  cloud:
+    config:
+      failFast: true
+      name: auth

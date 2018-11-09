@@ -1,0 +1,5 @@
+-Dspring.config.location=file:"path to file 'application.yml'"
+-Dlogging.config=file:"path to file 'logback.xml'"
+
+example
+-Dspring.config.location=file:/path/to/application-dev.yml

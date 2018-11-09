@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="create_table_accounts" author="Maxim Sambulat">
+        <sql>
+            CREATE SEQUENCE account_seq;
+            CREATE TABLE accounts
+            (
+                id BIGINT NOT NULL DEFAULT nextval('account_seq'),
+                username VARCHAR(32) NOT NULL,
+                hash_password TEXT NOT NULL,
+                platform_id UUID NOT NULL,
+                enabled BOOLEAN NOT NULL
+            );
+            ALTER TABLE public.accounts ADD CONSTRAINT accounts_pk PRIMARY KEY (id);
+        </sql>
+    </changeSet>
+</databaseChangeLog>

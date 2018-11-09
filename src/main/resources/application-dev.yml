@@ -1,0 +1,39 @@
+server:
+  port: 8888
+
+spring:
+  cloud:
+    inetutils:
+      preferredNetworks:
+        - 192.168
+
+  datasource:
+    url: jdbc:postgresql://postgres.eprocurement.systems:5432/authdb
+    username: postgres
+    password: postgres
+    driverClassName: org.postgresql.Driver
+
+    hikari:
+      maximum-pool-size: 10
+      pool-name: auth-pool
+      data-source-properties:
+        cachePrepStmts: true
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048
+
+jwt:
+  life-time:
+    access: 300
+    refresh: 1800
+
+  public-key: |
+             -----BEGIN PUBLIC KEY-----
+             MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAs6Ak7AGVxsmjZeRhlTjpThN56QgWNRsCxGtKEw0tj8Bx30xr1a46xpcE91sh41Tr9MPXFh/YwUq0wEprv3skCiRAD+Lbo68NReCvhYjbYn6hdiR5QBOlysEF0cO7GTiXgbY2JGkqcj+VlITp8cGiW6PkLIVzEjQXRkFfTToYupBKz4Lf7LtAGi+B50mX196yUHTirm6PKKJLcIuooqOHp39ecvaqHwWMloVH0sjTpZh7hvCRpARdxUQ/8KAB8tiFoMsCJPEr/Alr6P64B06oX0VzT68u5lyNQL6h5YaGxUuRwhFuKcvEt3wavHNoHn2FmyJjrhlcRLjyi3jiz/0WjQIDAQAB
+             -----END PUBLIC KEY-----
+
+  private-key: |
+             -----BEGIN PRIVATE KEY-----
+             MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCzoCTsAZXGyaNl5GGVOOlOE3npCBY1GwLEa0oTDS2PwHHfTGvVrjrGlwT3WyHjVOv0w9cWH9jBSrTASmu/eyQKJEAP4tujrw1F4K+FiNtifqF2JHlAE6XKwQXRw7sZOJeBtjYkaSpyP5WUhOnxwaJbo+QshXMSNBdGQV9NOhi6kErPgt/su0AaL4HnSZfX3rJQdOKubo8ooktwi6iio4enf15y9qofBYyWhUfSyNOlmHuG8JGkBF3FRD/woAHy2IWgywIk8Sv8CWvo/rgHTqhfRXNPry7mXI1AvqHlhobFS5HCEW4py8S3fBq8c2gefYWbImOuGVxEuPKLeOLP/RaNAgMBAAECggEAffL/kKB35gBC21Is/lX+eSl85OIvuCLtaM6WDQ/Db7WP4vQR9K2LNu5zpAG5nE5SeLjNWw0PjlEUtnQ4YvY0SgwrAzidq4M1+lZWnHpe4gxKqK1ge4aLTMTVkMT+ruuYiHI8OoGnKp7dAlvEMikE797WQkV8bzopS7DQ4zSmXEFaYsttgd2gyyWu645bynFRVvYIcbLN4I1XqeVuPVF15PZZw9paZmji2y3UTpf2UkL1YKS1dXUAQ9Xke9t5cBOTRPb7RqtL9vLwLgHHzk70N+urbMYLo5Qu5+J2z2GpsMv/8CEa9XYF111TN4138mhB1bWvqMTyOmVgGIQhKUt3AQKBgQD6kpdnTUN6GRNtLl6LvxPmeNXRi7t4mRR6vXPGwrq3PweUspDaomDKj6dRVPI+5T7C1lMXNKwXMMmaQ15mEys08Bro9j4FmNt4SCr04xhG4tmMKGy5BywG35cbqmAxAULPWSnLMZ8JXYPyF/d5G6Ki5ZYXPHD7Dsu9o+9/aqEcTQKBgQC3hCfz7vETip/7pXaGMKQAbK4bK5Vym15fRkghly1kC8RBg4pZQyq7Mk+NDd3zrD/DVSJ/90csr/Q1TUI0DRuSnQKRmurHC6Zglwc3Ww8ymhktt7SBe9PqwA2CiGeMNSuDIQ0OT+fP++MNi9nvM4V3KbcewSEDIJHm/BeSIMADQQKBgEdJb0OXaqwQ+ELmn0VYvjuigwpTm6lKu9XTkl2oxuAdUXXPe4CIE8ttJSfxZ93W8I0T1p3SgWcznReDNRcLOw6bhLxkWe7TtxS4S2hSN3TrUwMZ+RyG2tK1x9K6HRW0CyLcdhR18I4EieZVRTWyVAnOEW5Y5re2VOaF/jwcxOs9AoGAL5KNvNl7GyK7eEObZwvi581EkPyKYExQeYhBmJuVA7NdK9KKobscr6xKHPm0SL+lQ+Ck8eFLTRVLzCl7+PxQ4n/bM52iMPkfJzjfgQUU+nwh/Mz7ePl9pQQmPGlZ1mnOHs8JkGU8ZZkZceCIHU8Q0SQ6OTm9cg8WY3eEMLhWrkECgYBcZ2KR9XCv32jYLb10IWatbKMtt9Kw91cbbZv6yPAUmsMGlVMIasHiElOAPYjd4Wt+rw5NLvAYAmNuFxI2NnW0i8kkALNqhm1NrU/bmrsfV6ZJ4YqjBqxR1UclcabE5s3+gpT8uP0XFI+rB3W9qpPAJZBVURZILRRaMzfJZFFtnA==
+             -----END PRIVATE KEY-----
+
+
