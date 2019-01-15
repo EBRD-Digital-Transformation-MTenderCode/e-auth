@@ -6,8 +6,17 @@ import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
 import com.procurement.auth.ACCESS_TOKEN
 import com.procurement.auth.REFRESH_TOKEN
-import com.procurement.auth.exception.security.*
-import com.procurement.auth.model.*
+import com.procurement.auth.exception.security.AccountRevokedException
+import com.procurement.auth.exception.security.PlatformUnknownException
+import com.procurement.auth.exception.security.TokenExpiredException
+import com.procurement.auth.exception.security.VerificationTokenException
+import com.procurement.auth.exception.security.WrongTypeRefreshTokenException
+import com.procurement.auth.model.AUTHORIZATION_HEADER_NAME
+import com.procurement.auth.model.AUTHORIZATION_PREFIX_BEARER
+import com.procurement.auth.model.BASIC_REALM
+import com.procurement.auth.model.BEARER_REALM
+import com.procurement.auth.model.ERROR_CODE_INVALID_TOKEN
+import com.procurement.auth.model.WWW_AUTHENTICATE_HEADER_NAME
 import com.procurement.auth.model.token.AuthTokens
 import com.procurement.auth.service.TokenService
 import org.hamcrest.core.IsEqual.equalTo
@@ -28,7 +37,10 @@ import org.springframework.restdocs.payload.PayloadDocumentation.responseFields
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.header
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.test.web.servlet.setup.StandaloneMockMvcBuilder
 
@@ -36,6 +48,7 @@ import org.springframework.test.web.servlet.setup.StandaloneMockMvcBuilder
 class TokenVerificationControllerTest {
     companion object {
         private const val URL = "/auth/refresh"
+        private const val EXCEPTION_MESSAGE = "MESSAGE"
     }
 
     private lateinit var mockMvc: MockMvc
@@ -184,7 +197,7 @@ class TokenVerificationControllerTest {
     @Test
     @DisplayName("The error of verification token")
     fun verificationToken() {
-        doThrow(VerificationTokenException::class)
+        doThrow(VerificationTokenException(EXCEPTION_MESSAGE, RuntimeException()))
             .whenever(tokenService)
             .getTokensByRefreshToken(any())
 
@@ -258,7 +271,8 @@ class TokenVerificationControllerTest {
             .getTokensByRefreshToken(any())
 
         val authHeaderValue = "$AUTHORIZATION_PREFIX_BEARER $REFRESH_TOKEN"
-        val wwwAuthHeaderValue = """$BEARER_REALM, $ERROR_CODE_INVALID_TOKEN, error_message="The platform is unknown.""""
+        val wwwAuthHeaderValue =
+            """$BEARER_REALM, $ERROR_CODE_INVALID_TOKEN, error_message="The platform is unknown.""""
         mockMvc.perform(
             get(URL)
                 .header(AUTHORIZATION_HEADER_NAME, authHeaderValue))

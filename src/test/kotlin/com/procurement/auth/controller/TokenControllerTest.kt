@@ -6,13 +6,21 @@ import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
 import com.procurement.auth.ACCESS_TOKEN
 import com.procurement.auth.REFRESH_TOKEN
-import com.procurement.auth.exception.security.*
-import com.procurement.auth.model.*
+import com.procurement.auth.exception.security.AccountRevokedException
+import com.procurement.auth.exception.security.PlatformUnknownException
+import com.procurement.auth.exception.security.TokenExpiredException
+import com.procurement.auth.exception.security.VerificationTokenException
+import com.procurement.auth.exception.security.WrongTypeRefreshTokenException
+import com.procurement.auth.model.AUTHORIZATION_HEADER_NAME
+import com.procurement.auth.model.AUTHORIZATION_PREFIX_BASIC
+import com.procurement.auth.model.AUTHORIZATION_PREFIX_BEARER
+import com.procurement.auth.model.BEARER_REALM
+import com.procurement.auth.model.ERROR_CODE_INVALID_TOKEN
+import com.procurement.auth.model.WWW_AUTHENTICATE_HEADER_NAME
 import com.procurement.auth.model.token.AuthTokens
 import com.procurement.auth.service.TokenService
 import org.apache.commons.codec.binary.Base64
 import org.apache.commons.codec.binary.StringUtils
-import org.hamcrest.core.IsEqual
 import org.hamcrest.core.IsEqual.equalTo
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -32,12 +40,19 @@ import org.springframework.restdocs.payload.PayloadDocumentation.responseFields
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.header
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.test.web.servlet.setup.StandaloneMockMvcBuilder
 
 @ExtendWith(RestDocumentationExtension::class)
 class TokenControllerTest {
+    companion object {
+        private const val EXCEPTION_MESSAGE = "MESSAGE"
+    }
+
     private lateinit var mockMvc: MockMvc
     private lateinit var tokenService: TokenService
 
@@ -189,7 +204,7 @@ class TokenControllerTest {
         @Test
         @DisplayName("The error of verification token")
         fun verificationToken() {
-            doThrow(VerificationTokenException::class)
+            doThrow(VerificationTokenException(EXCEPTION_MESSAGE, RuntimeException()))
                 .whenever(tokenService)
                 .getTokensByRefreshToken(REFRESH_TOKEN)
 
@@ -226,7 +241,7 @@ class TokenControllerTest {
         @Test
         @DisplayName("The refresh-token has expired")
         fun tokenExpired() {
-            doThrow(TokenExpiredException::class)
+            doThrow(TokenExpiredException(EXCEPTION_MESSAGE))
                 .whenever(tokenService)
                 .getTokensByRefreshToken(REFRESH_TOKEN)
 
@@ -259,7 +274,7 @@ class TokenControllerTest {
         @Test
         @DisplayName("The platform is unknown")
         fun platformNotFound() {
-            doThrow(PlatformUnknownException::class)
+            doThrow(PlatformUnknownException(EXCEPTION_MESSAGE))
                 .whenever(tokenService)
                 .getTokensByRefreshToken(REFRESH_TOKEN)
 
@@ -292,7 +307,7 @@ class TokenControllerTest {
         @Test
         @DisplayName("Wrong type of the token type")
         fun bearerTokenWrongType() {
-            doThrow(WrongTypeRefreshTokenException::class)
+            doThrow(WrongTypeRefreshTokenException(EXCEPTION_MESSAGE))
                 .whenever(tokenService)
                 .getTokensByRefreshToken(ACCESS_TOKEN)
 
@@ -325,7 +340,7 @@ class TokenControllerTest {
         @Test
         @DisplayName("The account is revoked")
         fun accountRevoked() {
-            doThrow(AccountRevokedException::class)
+            doThrow(AccountRevokedException(EXCEPTION_MESSAGE))
                 .whenever(tokenService)
                 .getTokensByRefreshToken(REFRESH_TOKEN)
 
@@ -478,7 +493,7 @@ class TokenControllerTest {
         @Test
         @DisplayName("The error of verification token")
         fun verificationToken() {
-            doThrow(VerificationTokenException::class)
+            doThrow(VerificationTokenException(EXCEPTION_MESSAGE, RuntimeException()))
                 .whenever(tokenService)
                 .verification(ACCESS_TOKEN)
 
@@ -515,7 +530,7 @@ class TokenControllerTest {
         @Test
         @DisplayName("The access-token has expired")
         fun tokenExpired() {
-            doThrow(TokenExpiredException::class)
+            doThrow(TokenExpiredException(EXCEPTION_MESSAGE))
                 .whenever(tokenService)
                 .verification(ACCESS_TOKEN)
 
@@ -548,7 +563,7 @@ class TokenControllerTest {
         @Test
         @DisplayName("Wrong type of the token type")
         fun bearerTokenWrongType() {
-            doThrow(WrongTypeRefreshTokenException::class)
+            doThrow(WrongTypeRefreshTokenException(EXCEPTION_MESSAGE))
                 .whenever(tokenService)
                 .verification(REFRESH_TOKEN)
 

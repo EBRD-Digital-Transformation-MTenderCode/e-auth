@@ -1,15 +1,34 @@
 package com.procurement.auth.controller
 
-import com.procurement.auth.exception.security.*
+import com.procurement.auth.exception.security.AccountRevokedException
+import com.procurement.auth.exception.security.EmptyAuthTokenException
+import com.procurement.auth.exception.security.InvalidAuthHeaderTypeException
+import com.procurement.auth.exception.security.NoSuchAuthHeaderException
+import com.procurement.auth.exception.security.PlatformUnknownException
+import com.procurement.auth.exception.security.TokenExpiredException
+import com.procurement.auth.exception.security.VerificationTokenException
+import com.procurement.auth.exception.security.WrongTypeRefreshTokenException
 import com.procurement.auth.helper.getBearerTokenByAuthHeader
-import com.procurement.auth.model.*
-import com.procurement.auth.model.response.*
+import com.procurement.auth.infrastructure.logger.Slf4jLogger
+import com.procurement.auth.model.AUTHORIZATION_HEADER_NAME
+import com.procurement.auth.model.BEARER_REALM
+import com.procurement.auth.model.CodesOfErrors
+import com.procurement.auth.model.ERROR_CODE_INVALID_TOKEN
+import com.procurement.auth.model.WWW_AUTHENTICATE_HEADER_NAME
+import com.procurement.auth.model.response.Data
+import com.procurement.auth.model.response.Error
+import com.procurement.auth.model.response.ErrorRS
+import com.procurement.auth.model.response.TokenRS
+import com.procurement.auth.model.response.Tokens
+import com.procurement.auth.model.response.VerificationSuccessRS
 import com.procurement.auth.service.TokenService
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.ExceptionHandler
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RequestHeader
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/auth")
@@ -18,7 +37,7 @@ class TokenController(
 ) {
 
     companion object {
-        val log: Logger = LoggerFactory.getLogger(TokenController::class.java)
+        val log: com.procurement.auth.logging.Logger = Slf4jLogger()
     }
 
     @GetMapping(value = ["/refresh"])
@@ -57,7 +76,7 @@ class TokenController(
 
     @ExceptionHandler(value = [NoSuchAuthHeaderException::class])
     fun noSuchAuthHeader(e: NoSuchAuthHeaderException): ResponseEntity<ErrorRS> {
-        log.warn(e.message)
+        log.warn(e.message!!)
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED.value())
             .header(WWW_AUTHENTICATE_HEADER_NAME, BEARER_REALM)
             .body(
@@ -74,7 +93,7 @@ class TokenController(
 
     @ExceptionHandler(value = [InvalidAuthHeaderTypeException::class])
     fun invalidAuthHeaderType(e: InvalidAuthHeaderTypeException): ResponseEntity<ErrorRS> {
-        log.warn(e.message)
+        log.warn(e.message!!)
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED.value())
             .header(WWW_AUTHENTICATE_HEADER_NAME, BEARER_REALM)
             .body(
@@ -91,7 +110,7 @@ class TokenController(
 
     @ExceptionHandler(value = [EmptyAuthTokenException::class])
     fun emptyAuthToken(e: EmptyAuthTokenException): ResponseEntity<ErrorRS> {
-        SignInController.log.warn(e.message)
+        log.warn(e.message!!)
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED.value())
             .header(WWW_AUTHENTICATE_HEADER_NAME, BEARER_REALM)
             .body(
@@ -108,7 +127,7 @@ class TokenController(
 
     @ExceptionHandler(value = [VerificationTokenException::class])
     fun verificationToken(e: VerificationTokenException): ResponseEntity<ErrorRS> {
-        SignInController.log.warn(e.message)
+        log.warn(e.message!!)
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED.value())
             .header(WWW_AUTHENTICATE_HEADER_NAME, BEARER_REALM)
             .body(
@@ -125,7 +144,7 @@ class TokenController(
 
     @ExceptionHandler(value = [WrongTypeRefreshTokenException::class])
     fun wrongTypeToken(e: WrongTypeRefreshTokenException): ResponseEntity<ErrorRS> {
-        log.warn(e.message)
+        log.warn(e.message!!)
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED.value())
             .header(
                 WWW_AUTHENTICATE_HEADER_NAME,
@@ -145,7 +164,7 @@ class TokenController(
 
     @ExceptionHandler(value = [PlatformUnknownException::class])
     fun platformNotFound(e: PlatformUnknownException): ResponseEntity<ErrorRS> {
-        log.warn(e.message)
+        log.warn(e.message!!)
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED.value())
             .header(
                 WWW_AUTHENTICATE_HEADER_NAME,
@@ -165,7 +184,7 @@ class TokenController(
 
     @ExceptionHandler(value = [TokenExpiredException::class])
     fun tokenExpired(e: TokenExpiredException): ResponseEntity<ErrorRS> {
-        log.warn(e.message)
+        log.warn(e.message!!)
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED.value())
             .header(
                 WWW_AUTHENTICATE_HEADER_NAME,
@@ -185,7 +204,7 @@ class TokenController(
 
     @ExceptionHandler(value = [AccountRevokedException::class])
     fun accountRevoked(e: AccountRevokedException): ResponseEntity<ErrorRS> {
-        log.warn(e.message)
+        log.warn(e.message!!)
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED.value())
             .header(
                 WWW_AUTHENTICATE_HEADER_NAME,
